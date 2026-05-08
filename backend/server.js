@@ -1,8 +1,9 @@
-// src/server.js
+
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const connectDB = require("./src/config/db");
+const auth = require("./src/routes/auth.routes")
 
 const app = express();
 
@@ -12,7 +13,7 @@ app.use(cors());
 app.use(express.json());
 
 // Routes
-// app.use("/api/auth", require("./routes/authRoutes"));
+app.use("/api/auth", auth);
 // app.use("/api/packages", require("./routes/packageRoutes"));
 // app.use("/api/payments", require("./routes/paymentRoutes"));
 // app.use("/api/sessions", require("./routes/sessionRoutes"));
