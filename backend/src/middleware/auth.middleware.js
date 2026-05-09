@@ -1,7 +1,7 @@
-// src/middleware/authMiddleware.js
+
 const jwt = require("jsonwebtoken");
 
-const middleware = function (req, res, next) {
+const authMiddleware = function (req, res, next) {
   const token = req.header("Authorization");
 
   if (!token) return res.status(401).json({ msg: "Not Authorized" });
@@ -15,4 +15,4 @@ const middleware = function (req, res, next) {
   }
 };
 
-module.exports = middleware;
+module.exports = authMiddleware;

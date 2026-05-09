@@ -1,0 +1,16 @@
+$kind: http-request
+name: login
+url: http://localhost:5000/api/auth/login
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \    \"email\":\"johndoe@gmail.com\",\r
+
+    \    \"password\":\"1234567\"\r
+
+    }"
+auth:
+  type: jwt
+order: 2116654143705210

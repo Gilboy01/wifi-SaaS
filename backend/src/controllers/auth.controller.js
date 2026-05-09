@@ -85,3 +85,47 @@ exports.register = async (req, res) => {
     res.status(500).json({ message: "Error in register controller" });
   }
 };
+
+//Login controller
+exports.login = async (req, res) => {
+  const { email, password, role = "admin" } = req.body;
+
+  try {
+    // check if all fields are filled in
+    if (!email || !password) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
+    // check email
+    const user = await User.findOne({ email });
+
+
+    if (!user) {
+      return res.status(400).json({ message: "Invalid credentials" });
+    }
+
+    // check password
+    const isPasswordCorrect = await bcrypt.compare(password, user.password);
+
+    if (!isPasswordCorrect) {
+      return res.status(400).json({ message: "Invalid credentials" });
+    }
+
+    // Authenticate
+    generateToken(user._id, user.tenantId, res);
+
+          res.status(200).json({
+      user: {
+            userId: user._id,
+            tenantId: user.tenantId,
+            role: user.role
+      },
+      message: "User logged in successfully"
+     });
+
+  } catch (err) {
+    console.error("Login error:", err);
+    res.status(500).json({ message: "Error in login controller" });
+  }
+};
+
