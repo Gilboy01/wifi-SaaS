@@ -1,11 +1,10 @@
-// src/controllers/authController.js
 const bcrypt = require("bcrypt");
 const Tenant = require("../models/tenant.model");
 const User = require("../models/user.model");
 const {generateToken} = require("../lib/utils")
 
 
-//Register controller
+ /*    Register controller   */
 exports.register = async (req, res) => {
   const { businessName, email, password, role = "admin" } = req.body;
 
@@ -86,7 +85,7 @@ exports.register = async (req, res) => {
   }
 };
 
-//Login controller
+  /* Login controller */
 exports.login = async (req, res) => {
   const { email, password, role = "admin" } = req.body;
 
@@ -128,4 +127,11 @@ exports.login = async (req, res) => {
     res.status(500).json({ message: "Error in login controller" });
   }
 };
+
+/* Logout controller */ 
+exports.logout =  (_,res) => {
+    res.cookie("jwt", "", {maxAge:0});
+    res.status(200).json({message: "Logged out successfully"});
+};
+
 

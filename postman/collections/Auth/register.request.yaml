@@ -1,0 +1,5 @@
+$kind: http-request
+name: register
+url: http://localhost:5000/api/auth/register
+method: POST
+order: 1000
