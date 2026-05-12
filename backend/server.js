@@ -4,6 +4,9 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const connectDB = require("./src/config/db");
 const authRoutes = require("./src/routes/auth.routes")
+const packageRoutes = require("./src/routes/package.routes")
+// const paymentRoutes = require("./src/routes/package.routes")
+// const sessionRoutes = require("./src/routes/package.routes")
 
 require("dotenv").config();
 const app = express();
@@ -16,7 +19,7 @@ app.use(cookieParser());
 
 // Routes
 app.use("/api/auth", authRoutes);
-// app.use("/api/packages", packageRoutes);
+app.use("/api/packages", packageRoutes);
 // app.use("/api/payments", paymentRoutes);
 // app.use("/api/sessions", sessionRoutes);
 
