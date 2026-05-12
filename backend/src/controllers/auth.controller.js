@@ -134,4 +134,11 @@ exports.logout =  (_,res) => {
     res.status(200).json({message: "Logged out successfully"});
 };
 
-
+//  get profile
+exports.getProfile = async(req,res) => {
+    try {
+      res.json(req.user);  
+    } catch (error) {
+       res.status(500).json({message: "Server error", error: error.message}); 
+    }
+}

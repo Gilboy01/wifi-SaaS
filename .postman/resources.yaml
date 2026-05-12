@@ -1,8 +1,0 @@
-workspace:
-  id: 82f4da24-1ba8-48c4-a21f-83988c0675bf
-localResources:
-  collections:
-    - ../postman/collections/Auth
-cloudResources:
-  collections:
-    ../postman/collections/Auth: 50105839-efa869a2-e1c1-427f-bd28-71247af2883f
