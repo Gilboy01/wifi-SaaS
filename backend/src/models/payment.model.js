@@ -18,10 +18,10 @@ const paymentSchema = new mongoose.Schema({
     required: true
   },
 
-  // currency: {
-  //   type: String,
-  //   default: "UGX"
-  // },
+  currency: {
+    type: String,
+    default: "UGX"
+  },
 
   provider: {
     type: String,
@@ -46,10 +46,10 @@ const paymentSchema = new mongoose.Schema({
     ref: "Package"
   },
 
-  // sessionId: {
-  //   type: mongoose.Schema.Types.ObjectId,
-  //   ref: "Session"
-  // },
+  sessionId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Session"
+  },
 
 
 },{timestamps: true});

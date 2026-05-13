@@ -230,6 +230,12 @@ exports.updatePackage = async (req, res) => {
       });
     }
 
+       if (updates.isActive !== undefined && typeof updates.isActive !== 'boolean') {
+      return res.status(400).json({
+        success: false,
+        message: "isActive must be a boolean"
+      });
+    }
 
     if (Object.keys(updates).length === 0) {
       return res.status(400).json({
@@ -326,7 +332,7 @@ exports.deletePackage = async (req, res) => {
 
     res.json({
       success: true,
-      message: "Package deleted"
+      message: "Package disabled"
     });
 
   } catch (error) {

@@ -124,8 +124,7 @@ exports.mockSuccess = async (req, res) => {
       });
 
     }
-
-    
+   
 
     // check active session
     const existingSession = await Session.findOne({
@@ -142,11 +141,8 @@ exports.mockSuccess = async (req, res) => {
   });
 
 }
-    // mark payment successful
-    payment.status = "success";
-    await payment.save();
 
-    // get package
+  // get package
     const pkg = await Package.findById(payment.packageId);
 
     if (!pkg) {
@@ -156,7 +152,11 @@ exports.mockSuccess = async (req, res) => {
     message: "Package no longer exists"
   });
 
-}
+   }
+    // mark payment successful
+    payment.status = "success";
+    await payment.save();
+
     // create session
     const session = await Session.create({
         tenantId: payment.tenantId,
@@ -172,14 +172,14 @@ exports.mockSuccess = async (req, res) => {
 
       });
 
-      if (payment.status === "failed") {
+//       if (payment.status === "failed") {
 
-  return res.status(400).json({
-    success: false,
-    message: "Cannot process failed payment"
-  });
+//   return res.status(400).json({
+//     success: false,
+//     message: "Cannot process failed payment"
+//   });
 
-}
+// }
 
     res.json({
       success: true,
@@ -190,6 +190,7 @@ exports.mockSuccess = async (req, res) => {
     console.log("Error in mock success controller", error);
 
     res.status(500).json({
+      success: false,
       message: "Error in mock success controller"
     });
 

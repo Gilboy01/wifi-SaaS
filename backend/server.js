@@ -7,6 +7,7 @@ const authRoutes = require("./src/routes/auth.routes")
 const packageRoutes = require("./src/routes/package.routes")
 const paymentRoutes = require("./src/routes/payment.routes")
 // const sessionRoutes = require("./src/routes/package.routes")
+const rateLimit = require("express-rate-limit");
 
 require("dotenv").config();
 const app = express();
@@ -17,10 +18,17 @@ app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 
+
+const paymentLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 10, // Limit each IP to 10 requests per windowMs
+  message: "Too many payment requests, please try again later"
+});
+
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/packages", packageRoutes);
-app.use("/api/payments", paymentRoutes);
+app.use("/api/payments", paymentLimiter, paymentRoutes);
 // app.use("/api/sessions", sessionRoutes);
 
 const PORT = process.env.PORT || 5000;
