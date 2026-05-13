@@ -131,8 +131,6 @@ exports.getPackages = async (req, res) => {
 };
 
 // get one package controller
-
-
 exports.getPackage = async (req, res) => {
 
   try {
@@ -208,7 +206,7 @@ exports.updatePackage = async (req, res) => {
     }
 
      // Whitelist allowed update fields
-   const allowedUpdates = ['name', 'price', 'duration', 'hotspotId'];
+   const allowedUpdates = ['name', 'price', 'duration', 'hotspotId', 'isActive'];
     const updates = {};
     
     for (const key of allowedUpdates) {
@@ -231,6 +229,7 @@ exports.updatePackage = async (req, res) => {
         message: "Duration must be a positive number"
       });
     }
+
 
     if (Object.keys(updates).length === 0) {
       return res.status(400).json({
@@ -327,7 +326,7 @@ exports.deletePackage = async (req, res) => {
 
     res.json({
       success: true,
-      message: "Package disabled"
+      message: "Package deleted"
     });
 
   } catch (error) {

@@ -5,7 +5,7 @@ const cookieParser = require("cookie-parser");
 const connectDB = require("./src/config/db");
 const authRoutes = require("./src/routes/auth.routes")
 const packageRoutes = require("./src/routes/package.routes")
-// const paymentRoutes = require("./src/routes/package.routes")
+const paymentRoutes = require("./src/routes/payment.routes")
 // const sessionRoutes = require("./src/routes/package.routes")
 
 require("dotenv").config();
@@ -20,7 +20,7 @@ app.use(cookieParser());
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/packages", packageRoutes);
-// app.use("/api/payments", paymentRoutes);
+app.use("/api/payments", paymentRoutes);
 // app.use("/api/sessions", sessionRoutes);
 
 const PORT = process.env.PORT || 5000;

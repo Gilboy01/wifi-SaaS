@@ -18,10 +18,10 @@ const paymentSchema = new mongoose.Schema({
     required: true
   },
 
-  currency: {
-    type: String,
-    default: "UGX"
-  },
+  // currency: {
+  //   type: String,
+  //   default: "UGX"
+  // },
 
   provider: {
     type: String,
@@ -29,9 +29,7 @@ const paymentSchema = new mongoose.Schema({
     required: true
   },
 
-  transactionId: {
-    type: String
-  },
+  transactionId: String,
 
   externalId: String, // from payment API
 
@@ -43,10 +41,15 @@ const paymentSchema = new mongoose.Schema({
 
   macAddress: String,
 
-  sessionId: {
+  packageId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Session"
+    ref: "Package"
   },
+
+  // sessionId: {
+  //   type: mongoose.Schema.Types.ObjectId,
+  //   ref: "Session"
+  // },
 
 
 },{timestamps: true});
