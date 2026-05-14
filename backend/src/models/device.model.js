@@ -25,14 +25,16 @@ const deviceSchema = new mongoose.Schema({
   },
 
   macAddress: {
-
     type: String,
-
     required: true,
-
     uppercase: true,
-
-    trim: true
+    trim: true,
+    validate: {
+    validator: function(v) {
+      return /^([0-9A-F]{2}[:-]){5}([0-9A-F]{2})$/.test(v);
+    },
+    message: props => `${props.value} is not a valid MAC address format`
+  }
 
   },
 
