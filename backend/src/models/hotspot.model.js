@@ -1,7 +1,9 @@
-// models/Hotspot.js
+// models/hotspot.model.js
+
 const mongoose = require("mongoose");
 
 const hotspotSchema = new mongoose.Schema({
+
   tenantId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Tenant",
@@ -13,26 +15,29 @@ const hotspotSchema = new mongoose.Schema({
     required: true
   },
 
-  location: String,
+  hotspotCode: {
+    type: String,
+    unique: true
+  },
 
-  routerIP: String,
+  routerHost: String,
 
-  routerUsername: String,
+  routerUser: String,
+
   routerPassword: String,
 
-  routerType: {
-    type: String,
-    enum: ["mikrotik", "openwrt"],
-    default: "mikrotik"
+  routerPort: {
+    type: Number,
+    default: 8728
   },
 
-  status: {
-    type: String,
-    enum: ["active", "offline"],
-    default: "active"
-  },
+  isActive: {
+    type: Boolean,
+    default: true
+  }
 
-
-}, {timestamps: true});
+}, {
+  timestamps: true
+});
 
 module.exports = mongoose.model("Hotspot", hotspotSchema);

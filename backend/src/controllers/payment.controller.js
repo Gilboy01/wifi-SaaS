@@ -5,6 +5,7 @@ const Payment = require("../models/payment.model");
 const Package = require("../models/package.model");
 const Session = require("../models/session.model");
 const { requestToPay } = require("../services/mtn.service");
+const { grantInternetAccess, revokeInternetAccess } = require("../services/router.service")
 
 exports.initiatePayment = async (req, res) => {
 
@@ -160,6 +161,7 @@ exports.mockSuccess = async (req, res) => {
     // create session
     const session = await Session.create({
         tenantId: payment.tenantId,
+        hotspotId: pkg.hotspotId,
         macAddress: payment.macAddress,
         packageId: payment.packageId,
         startTime: new Date(),
@@ -172,20 +174,17 @@ exports.mockSuccess = async (req, res) => {
 
       });
 
-//       if (payment.status === "failed") {
+      // session is active and not expired yet, so grant access
+      
+        await grantInternetAccess({ macAddress: payment.macAddress });
 
-//   return res.status(400).json({
-//     success: false,
-//     message: "Cannot process failed payment"
-//   });
+        console.log(`MAC Address - ${payment.macAddress} connected to internet successfully`);
 
-// }
-
-    res.json({
-      success: true,
-      session
-    });
-
+        return res.status(200).json({
+          success: true,
+          session
+        });
+      
   } catch (error) {
     console.log("Error in mock success controller", error);
 

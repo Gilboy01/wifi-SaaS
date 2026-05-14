@@ -49,10 +49,9 @@ try {
   };
 } catch (error) {
   console.log("Error in mtn service helper", error);
-
-  res.status(500).json({
+  return {
     success: false,
     message: "Error in request-to-pay service"
-  })
+  };
   }
 };
