@@ -176,7 +176,11 @@ exports.mockSuccess = async (req, res) => {
 
       // session is active and not expired yet, so grant access
       
-        await grantInternetAccess({ macAddress: payment.macAddress });
+        // await grantInternetAccess({ macAddress: payment.macAddress });
+       await  grantInternetAccess({
+                  hotspotId: pkg.hotspotId,
+                  macAddress: payment.macAddress
+          });
 
         console.log(`MAC Address - ${payment.macAddress} connected to internet successfully`);
 
