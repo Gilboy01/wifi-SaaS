@@ -5,7 +5,8 @@ const Payment = require("../models/payment.model");
 const Package = require("../models/package.model");
 const Session = require("../models/session.model");
 const { requestToPay } = require("../services/mtn.service");
-const { grantInternetAccess, revokeInternetAccess } = require("../services/router.service")
+const { grantInternetAccess, revokeInternetAccess } = require("../services/router.service");
+const { registerDevice } = require("../services/device.service");
 
 exports.initiatePayment = async (req, res) => {
 
@@ -16,6 +17,15 @@ exports.initiatePayment = async (req, res) => {
       phoneNumber,
       macAddress  } = req.body;
 
+  // validation
+  if (!hotspotId ||!packageId ||!phoneNumber ||!macAddress) {
+
+  return res.status(400).json({
+    success: false,
+    message: "All fields are required"
+  });
+
+}
     // find package
     const pkg = await Package.findOne({
        _id: packageId,
@@ -49,13 +59,49 @@ exports.initiatePayment = async (req, res) => {
     //   externalId,
     //   status: "pending"
     // });
+    const uppercaseMAC = macAddress.toUpperCase().trim();
 
+// check for pending payments
+const existingPending = await Payment.findOne({
+    macAddress: uppercaseMAC,
+    packageId,
+    status: "pending"
+  });
+
+if (existingPending) {
+  return res.status(400).json({
+    success: false,
+    message: "Pending payment already exists"
+  });
+
+}
+
+// check if there is active session
+const activeSession = await Session.findOne({
+    macAddress: uppercaseMAC,
+    status: "active",
+    expiryTime: {
+      $gt: new Date()
+    }
+  });
+
+if (activeSession) {
+  return res.status(400).json({
+    success: false,
+    message:"Device already has internet access"
+  });
+
+}
+
+
+// create payment record
     const payment = await Payment.create({
   tenantId,
+  hotspotId,
   packageId,
   amount: pkg.price,
   phoneNumber,
-  macAddress,
+  macAddress: uppercaseMAC,
   provider: "MTN",
   externalId,
   status: "pending"
@@ -78,7 +124,7 @@ exports.initiatePayment = async (req, res) => {
     message: "transaction failed"
   });
  }
-
+    // store provider transaction id
     payment.transactionId = response.transactionId;
 
     await payment.save();
@@ -125,11 +171,21 @@ exports.mockSuccess = async (req, res) => {
       });
 
     }
-   
+
+    if (payment.status === "failed") {
+
+  return res.status(400).json({
+    success: false,
+    message: "Cannot process failed payment"
+  });
+
+}
+// MAC address validation
+   const normalizedMac = payment.macAddress.toUpperCase().trim();
 
     // check active session
     const existingSession = await Session.findOne({
-    macAddress: payment.macAddress,
+    macAddress: normalizedMac,
     status: "active",
     expiryTime: { $gt: new Date() }
   });
@@ -154,41 +210,54 @@ exports.mockSuccess = async (req, res) => {
   });
 
    }
+   
+   //register device
+   const device = await registerDevice({
+     tenantId: payment.tenantId,
+     hotspotId: pkg.hotspotId,
+     macAddress: normalizedMac
+    });
+    
+    // for stronger relationship between payment n device model
+    // attach device to payment
+    payment.deviceId = device._id;
+
     // mark payment successful
     payment.status = "success";
     await payment.save();
 
     // create session
-    const session = await Session.create({
-        tenantId: payment.tenantId,
-        hotspotId: pkg.hotspotId,
-        macAddress: payment.macAddress,
-        packageId: payment.packageId,
-        startTime: new Date(),
-        expiryTime:
-          new Date(
-            Date.now() + pkg.duration * 60 * 1000
-          ),
+   const session = await Session.create({
+    tenantId: payment.tenantId,
+    hotspotId: pkg.hotspotId,
+    deviceId: device._id,
+    macAddress: normalizedMac,
+    packageId: payment.packageId,
+    startTime: new Date(),
+    expiryTime: new Date( Date.now() + pkg.duration * 60 * 1000),
 
-        status: "active"
+    status: "active"
 
-      });
+});
 
-      // session is active and not expired yet, so grant access
-      
-        // await grantInternetAccess({ macAddress: payment.macAddress });
-       await  grantInternetAccess({
+      // Grant internet access
+        try {
+          await  grantInternetAccess({
                   hotspotId: pkg.hotspotId,
-                  macAddress: payment.macAddress
+                  macAddress: normalizedMac
           });
 
-        console.log(`MAC Address - ${payment.macAddress} connected to internet successfully`);
+        console.log(`MAC Address - ${normalizedMac} connected to internet successfully`);
 
         return res.status(200).json({
           success: true,
           session
         });
       
+        } catch (error) {
+          console.log( "Router grant error", error);
+        }
+       
   } catch (error) {
     console.log("Error in mock success controller", error);
 

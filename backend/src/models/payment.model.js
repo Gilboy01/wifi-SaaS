@@ -8,6 +8,11 @@ const paymentSchema = new mongoose.Schema({
     required: true
   },
 
+  deviceId: {
+  type: mongoose.Schema.Types.ObjectId,
+  ref: "Device"
+},
+
   phoneNumber: {
     type: String,
     required: true
@@ -35,8 +40,8 @@ const paymentSchema = new mongoose.Schema({
 
   status: {
     type: String,
-    enum: ["pending", "success", "failed"],
-    default: "pending"
+    enum: ["inActive","pending", "success", "failed"],
+    default: "inActive"
   },
 
   macAddress: String,

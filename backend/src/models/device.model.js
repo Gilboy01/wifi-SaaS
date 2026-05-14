@@ -1,22 +1,83 @@
-// models/Device.js
+// models/device.model.js
+
 const mongoose = require("mongoose");
 
 const deviceSchema = new mongoose.Schema({
-  macAddress: {
-    type: String,
-    required: true,
-    unique: true
-  },
 
-  ipAddress: String,
+  tenantId: {
+
+    type: mongoose.Schema.Types.ObjectId,
+
+    ref: "Tenant",
+
+    required: true
+
+  },
 
   hotspotId: {
+
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Hotspot"
+
+    ref: "Hotspot",
+
+    required: true
+
   },
 
-  lastSeen: Date,
+  macAddress: {
 
-},{timestamps: true});
+    type: String,
 
-module.exports = mongoose.model("Device", deviceSchema);
+    required: true,
+
+    uppercase: true,
+
+    trim: true
+
+  },
+
+  deviceName: {
+    type: String
+  },
+
+  lastSeen: {
+
+    type: Date,
+
+    default: Date.now
+
+  },
+
+  isBlocked: {
+
+    type: Boolean,
+
+    default: false
+
+  },
+
+  totalConnections: {
+
+    type: Number,
+
+    default: 0
+
+  }
+
+}, {
+  timestamps: true
+});
+
+
+// prevent duplicates
+deviceSchema.index({
+
+  hotspotId: 1,
+
+  macAddress: 1
+
+}, {
+  unique: true
+});
+
+module.exports = mongoose.model("Device", deviceSchema );
