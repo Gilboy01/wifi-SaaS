@@ -17,18 +17,21 @@ exports.expireSessions = async () => {
 
   for (const session of expiredSessions) {
 
-    await revokeInternetAccess({
+    try {
+      await revokeInternetAccess({
        macAddress: session.macAddress,
-       hotspotId: session.hotspotId });
+       hotspotId: session.hotspotId 
+      });
 
     session.status = "expired";
-
     await session.save();
 
-    console.log(
-      `Expired ${session.macAddress}, Internet blocked`
-    );
+    console.log( `Expired ${session.macAddress}, Internet blocked`);
 
+   } catch (error) {
+        console.error( `Failed to revoke internet access for ${session.macAddress}:`, error.message);  
+    }
+
+    
   }
-
 };

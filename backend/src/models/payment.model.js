@@ -40,8 +40,8 @@ const paymentSchema = new mongoose.Schema({
 
   status: {
     type: String,
-    enum: ["inActive","pending", "success", "failed"],
-    default: "inActive"
+    enum: ["inactive", "pending", "success", "failed"],
+    default: "inactive"
   },
 
   macAddress: String,

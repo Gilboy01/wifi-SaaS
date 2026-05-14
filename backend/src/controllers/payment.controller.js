@@ -222,41 +222,44 @@ exports.mockSuccess = async (req, res) => {
     // attach device to payment
     payment.deviceId = device._id;
 
-    // mark payment successful
+
+         // Grant internet access FIRST
+    try {
+      await grantInternetAccess({
+        hotspotId: pkg.hotspotId,
+        macAddress: normalizedMac
+      });
+    } catch (error) {
+      console.error("Router grant error", error);
+      return res.status(500).json({
+        success: false,
+        message: "Failed to grant internet access"
+      });
+    }
+
+    // mark payment successful only after access granted
     payment.status = "success";
     await payment.save();
 
     // create session
-   const session = await Session.create({
-    tenantId: payment.tenantId,
-    hotspotId: pkg.hotspotId,
-    deviceId: device._id,
-    macAddress: normalizedMac,
-    packageId: payment.packageId,
-    startTime: new Date(),
-    expiryTime: new Date( Date.now() + pkg.duration * 60 * 1000),
+    const session = await Session.create({
+      tenantId: payment.tenantId,
+      hotspotId: pkg.hotspotId,
+      deviceId: device._id,
+      macAddress: normalizedMac,
+      packageId: payment.packageId,
+      startTime: new Date(),
+      expiryTime: new Date(Date.now() + pkg.duration * 60 * 1000),
+      status: "active"
+    });
 
-    status: "active"
+    console.log(`MAC Address - ${normalizedMac} connected to internet successfully`);
 
-});
+    return res.status(200).json({
+      success: true,
+      session
+    });
 
-      // Grant internet access
-        try {
-          await  grantInternetAccess({
-                  hotspotId: pkg.hotspotId,
-                  macAddress: normalizedMac
-          });
-
-        console.log(`MAC Address - ${normalizedMac} connected to internet successfully`);
-
-        return res.status(200).json({
-          success: true,
-          session
-        });
-      
-        } catch (error) {
-          console.log( "Router grant error", error);
-        }
        
   } catch (error) {
     console.log("Error in mock success controller", error);
