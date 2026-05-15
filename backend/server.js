@@ -3,10 +3,10 @@ const express = require("express");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const connectDB = require("./src/config/db");
-const authRoutes = require("./src/routes/auth.routes")
-const packageRoutes = require("./src/routes/package.routes")
-const paymentRoutes = require("./src/routes/payment.routes")
-// const sessionRoutes = require("./src/routes/package.routes")
+const authRoutes = require("./src/routes/auth.routes");
+const packageRoutes = require("./src/routes/package.routes");
+const paymentRoutes = require("./src/routes/payment.routes");
+const sessionRoutes = require("./src/routes/package.routes");
 const rateLimit = require("express-rate-limit");
 
 require("dotenv").config();
@@ -29,7 +29,7 @@ const paymentLimiter = rateLimit({
 app.use("/api/auth", authRoutes);
 app.use("/api/packages", packageRoutes);
 app.use("/api/payments", paymentLimiter, paymentRoutes);
-// app.use("/api/sessions", sessionRoutes);
+app.use("/api/sessions", sessionRoutes);
 
 const PORT = process.env.PORT || 5000;
 

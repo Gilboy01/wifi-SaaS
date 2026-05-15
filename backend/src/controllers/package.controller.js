@@ -151,11 +151,8 @@ exports.getPackage = async (req, res) => {
     }
 
     const pkg = await Package.findOne({
-
       _id: req.params.id,
-
       tenantId: req.user.tenantId
-
     });
 
     if (!pkg) {
