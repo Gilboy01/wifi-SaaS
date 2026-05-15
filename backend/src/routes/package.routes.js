@@ -8,7 +8,7 @@ const roleMiddleware = require("../middleware/role.middleware");
 
 const router = require("express").Router();
 
-// apply auth midleware to all routes
+// apply auth middleware to all routes
 router.use(authMiddleware)
 
 // create package route

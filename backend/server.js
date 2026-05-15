@@ -6,7 +6,7 @@ const connectDB = require("./src/config/db");
 const authRoutes = require("./src/routes/auth.routes");
 const packageRoutes = require("./src/routes/package.routes");
 const paymentRoutes = require("./src/routes/payment.routes");
-const sessionRoutes = require("./src/routes/package.routes");
+const sessionRoutes = require("./src/routes/session.routes");
 const rateLimit = require("express-rate-limit");
 
 require("dotenv").config();

@@ -41,15 +41,17 @@ exports.disconnectSession = async (req, res) => {
 
   try {
 
-    const session = await Session.findById(req.params.id);
-
-    // Validate ObjectId format
+     // Validate ObjectId format
         if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
           return res.status(400).json({
             success: false,
-            message: "Invalid package ID format"
+            message: "Invalid session ID format"
           });
         }
+
+    const session = await Session.findById(req.params.id);
+
+   
 
     if (!session) {
       return res.status(404).json({
@@ -91,6 +93,13 @@ exports.disconnectSession = async (req, res) => {
 exports.getHotspotSessions = async (req, res) => {
 
   try {
+     // Validate ObjectId format
+          if (!mongoose.Types.ObjectId.isValid(req.params.hotspotId)) {
+            return res.status(400).json({
+              success: false,
+              message: "Invalid hotspot ID format"
+            });
+          }
 
     const sessions = await Session.find({
         hotspotId: req.params.hotspotId
@@ -98,18 +107,12 @@ exports.getHotspotSessions = async (req, res) => {
       .populate("deviceId")
       .populate("packageId");
 
-      // Validate ObjectId format
-          if (!mongoose.Types.ObjectId.isValid(req.params.hotspotId)) {
-            return res.status(400).json({
-              success: false,
-              message: "Invalid package ID format"
-            });
-          }
+     
         //   check if sessions exist
-           if (!sessions) {
+           if (sessions.length === 0) {
       return res.status(404).json({
         success: false,
-        message:"Session not found"
+        message:"No sessions found for this hotspot"
       });
 
     }
