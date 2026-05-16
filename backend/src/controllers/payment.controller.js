@@ -26,6 +26,12 @@ exports.initiatePayment = async (req, res) => {
   });
 
 }
+
+     // derive tenant from package
+    const tenantId = pkg.tenantId;
+
+    const externalId = uuidv4();
+
     // find package
     const pkg = await Package.findOne({
        _id: packageId,
@@ -42,23 +48,6 @@ exports.initiatePayment = async (req, res) => {
 
     }
 
-       // derive tenant from package
-    const tenantId = pkg.tenantId;
-
-    const externalId = uuidv4();
-
-        // create payment record
-
-    // const payment = await Payment.create({
-    //   tenantId: req.user.tenantId,
-    //   phoneNumber,
-    //   amount: pkg.price,
-    //   provider: "MTN",
-    //   packageId,
-    //   macAddress,
-    //   externalId,
-    //   status: "pending"
-    // });
     const uppercaseMAC = macAddress.toUpperCase().trim();
 
 // check for pending payments

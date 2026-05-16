@@ -6,10 +6,10 @@ const {generateToken} = require("../lib/utils")
 
  /*    Register controller   */
 exports.register = async (req, res) => {
-  const { businessName, email, password, role = "admin" } = req.body;
+  const { businessName, name, email, password } = req.body;
 
   try {
-    if (!businessName || !email || !password){
+    if (!businessName || !name  || !email || !password){
             return res.status(400).json({message:"All fields are required"});
         }
         
@@ -24,54 +24,47 @@ exports.register = async (req, res) => {
             
             return res.status(400).json({message:"Invalid email format"});
         }
-
-        // check if User or Tenant exists
+     // check if email exists
     const userExists = await User.findOne({email});
     
     if(userExists){
-        return res.status(400).json({message: "User already exists" })
+        return res.status(400).json({message: "User already exists" });
     }
-
-    const tenantExists = await Tenant.findOne({email});
-
-    if(tenantExists){
-        return res.status(400).json({message: "Tenant already exists" })
-    }
+   
     // hash password
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    // create Tenant
+    // create Tenant / Business
     const tenant = await Tenant.create({
-      businessName,
-      email,
-      password: hashedPassword
+      businessName
     });
 
-    // create user Account
+   
+
+    // create Admin user Account
     const user = await User.create({
-      tenantId: tenant._id,
+      name,
       email,
       password: hashedPassword,
-      role
+      role: "admin",
+      tenantId: tenant._id,
     });
 
-
-    // const token = jwt.sign(
-    //   { userId: user._id, tenantId: tenant._id },
-    //   process.env.JWT_SECRET
-    // );
-    if(user){
+    if(user && tenant){
         //Authenticate
-        generateToken(user._id, tenant._id, res );
-
+        generateToken(user._id, tenant._id, user.role, res );
           res.status(201).json({
         user:{
             userId: user._id,
+            name: user.name,
             tenantId: user.tenantId,
             role: user.role
         } ,
-        message: "User created successfully"
+        tenant:{
+          businessName: tenant.businessName
+        },
+        message: `${businessName} registered successfully`
      });
     } else {
         res.status(400).json({message: "Error in saving user data "});
@@ -80,14 +73,14 @@ exports.register = async (req, res) => {
   
 
   } catch (err) {
-    console.error("Register error:", err);
+    console.error("Business & admin Register controller error:", err);
     res.status(500).json({ message: "Error in register controller" });
   }
 };
 
   /* Login controller */
 exports.login = async (req, res) => {
-  const { email, password, role = "admin" } = req.body;
+  const { email, password } = req.body;
 
   try {
     // check if all fields are filled in
@@ -96,7 +89,7 @@ exports.login = async (req, res) => {
     }
 
     // check email
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email }).populate("tenantId");;
 
 
     if (!user) {
@@ -111,7 +104,7 @@ exports.login = async (req, res) => {
     }
 
     // Authenticate
-    generateToken(user._id, user.tenantId, res);
+    generateToken(user._id, user.tenantId, user.role, res);
 
           res.status(200).json({
       user: {
@@ -135,10 +128,35 @@ exports.logout =  (_,res) => {
 };
 
 //  get profile
-exports.getProfile = async(req,res) => {
-    try {
-      res.json(req.user);  
-    } catch (error) {
-       res.status(500).json({message: "Server error", error: error.message}); 
+// exports.getProfile = async(req,res) => {
+//     try {
+//       res.json(req.user);  
+//     } catch (error) {
+//        res.status(500).json({message: "Server error", error: error.message}); 
+//     }
+// }
+
+exports.getProfile = async (req, res) => {
+
+  try {
+    const user = await User.findById(req.user.userId).select("-password");
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found"
+      });
+
     }
-}
+
+    res.status(200).json({ user});
+
+  } catch (error) {
+
+    res.status(500).json({
+      message: "Server error",
+      error: error.message
+    });
+
+  }
+
+};

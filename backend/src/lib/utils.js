@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken") ;
 
 
-exports.generateToken = (userId, tenantId, res) =>{
+exports.generateToken = (userId, tenantId, role, res) =>{
     
     // create token
     const JWT_SECRET = process.env.JWT_SECRET;
@@ -9,7 +9,7 @@ exports.generateToken = (userId, tenantId, res) =>{
         throw new Error("JWT_SECRET is not configured");
     }
 
-    const token = jwt.sign({userId, tenantId}, JWT_SECRET, {
+    const token = jwt.sign({userId, tenantId, role}, JWT_SECRET, {
         expiresIn: "1d",
     });
 

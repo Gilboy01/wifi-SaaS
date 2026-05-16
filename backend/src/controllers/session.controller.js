@@ -8,6 +8,7 @@ exports.getActiveSessions = async (req, res) => {
   try {
 
     const sessions = await Session.find({
+      tenantId:req.user.tenantId,
         status: "active",
         expiryTime: {
           $gt: new Date()
@@ -68,7 +69,7 @@ exports.disconnectSession = async (req, res) => {
     });
 
     // mark expired
-    session.status = "expired";
+    session.status = "terminated";
     await session.save();
 
     res.status(200).json({
@@ -102,6 +103,7 @@ exports.getHotspotSessions = async (req, res) => {
           }
 
     const sessions = await Session.find({
+        tenantId: req.user.tenantId,
         hotspotId: req.params.hotspotId
       })
       .populate("deviceId")
