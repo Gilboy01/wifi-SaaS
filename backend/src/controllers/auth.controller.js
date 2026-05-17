@@ -37,7 +37,8 @@ exports.register = async (req, res) => {
 
     // create Tenant / Business
     const tenant = await Tenant.create({
-      businessName
+      businessName,
+      email
     });
 
    
