@@ -1,4 +1,5 @@
 const Hotspot = require("../models/hotspot.model");
+const bcrypt = require("bcrypt");
 exports.createHotspot = async (req, res) => {
 
   try {
@@ -10,7 +11,21 @@ exports.createHotspot = async (req, res) => {
       routerUsername,
       routerPassword
     } = req.body;
+    // validate fields
+    if (!name || !location || !routerIp || !routerUsername || !routerPassword) {
+   return res.status(400).json({
+     message: "All fields are required"
+   });
+ }
 
+// verify req.user.tenantid exists
+  if (!req.user || !req.user.tenantId) {
+    return res.status(400).json({
+    message: "Tenant information missing"
+    });
+  }
+
+  const hashedPassword = await bcrypt.hash(routerPassword, 10);
 
     const hotspot = await Hotspot.create({
 
@@ -19,13 +34,20 @@ exports.createHotspot = async (req, res) => {
         location,
         routerIp,
         routerUsername,
-        routerPassword
+        routerPassword:hashedPassword
 
       });
 
     res.status(201).json({
       success: true,
-      hotspot
+      hotspot: {
+     id: hotspot.id,
+     name: hotspot.name,
+     location: hotspot.location,
+     routerIp: hotspot.routerIp,
+     routerUsername: hotspot.routerUsername,
+     tenantId: hotspot.tenantId
+   }
 
     });
 
