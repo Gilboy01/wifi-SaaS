@@ -9,6 +9,7 @@ const packageRoutes = require("./src/routes/package.routes");
 const paymentRoutes = require("./src/routes/payment.routes");
 const sessionRoutes = require("./src/routes/session.routes");
 const userRoutes = require("./src/routes/staff.routes");
+const hotspotRoutes = require("./src/routes/hotspot.routes");
 
 const rateLimit = require("express-rate-limit");
 
@@ -34,6 +35,7 @@ app.use("/api/packages", packageRoutes);
 app.use("/api/payments", paymentLimiter, paymentRoutes);
 app.use("/api/sessions", sessionRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/hotspot", hotspotRoutes);
 
 
 const PORT = process.env.PORT || 5000;

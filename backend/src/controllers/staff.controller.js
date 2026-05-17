@@ -57,7 +57,13 @@ exports.createStaff =  async (req, res) => {
     res.status(201).json({
       success: true,
       message: `${staff.name} created successfully`,
-      staff
+      staff: {
+        id: staff._id,
+        name: staff.name,
+        email: staff.email,
+        role: staff.role,
+        tenantId:staff.tenantId
+      }
     });
 } catch(err){
 console.log("error creating staff", err);
