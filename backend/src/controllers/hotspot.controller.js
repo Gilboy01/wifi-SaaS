@@ -63,3 +63,35 @@ exports.createHotspot = async (req, res) => {
   }
 
 };
+
+exports.getAllHotspots = async(req,res) => {
+  try {
+      // Verify authentication
+    if (!req.user || !req.user.tenantId) {
+      return res.status(401).json({
+        success: false,
+        message: "Authentication required"
+      });
+    }
+    const hotspots = await Hotspot.find({
+      isActive: true || false
+    });
+
+    if(!hotspots){
+      return res.status(404).json({
+        message: "No hotspot found"
+      })
+    }
+
+    return res.status(200).json({
+      success: true,
+      hotspots
+    })
+  } catch (error) {
+    console.log("Error in getAllHotspots controller", error)
+    res.status(500).json({
+      success: false,
+      message: "error displaying hotspots"
+    })
+  }
+}
