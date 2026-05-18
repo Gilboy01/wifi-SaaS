@@ -129,7 +129,7 @@ exports.getHotspot = async(req, res) => {
         }
 
         return res.status(200).json({
-          sucess: true,
+          success: true,
           hotspot
         })
 
@@ -250,7 +250,7 @@ exports.updateHotspot = async(req, res) => {
 
     }
 
-    res.status(201).json({
+    res.status(200).json({
       success: true,
       data: hotspot
     });
