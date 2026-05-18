@@ -74,11 +74,12 @@ exports.getAllHotspots = async(req,res) => {
       });
     }
     const hotspots = await Hotspot.find({
-      isActive: true || false
+     tenantId: req.user.tenantId
     });
 
-    if(!hotspots){
+    if(hotspots.length === 0){
       return res.status(404).json({
+        success: false,
         message: "No hotspot found"
       })
     }
