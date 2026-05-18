@@ -15,14 +15,17 @@ const hotspotSchema = new mongoose.Schema({
     required: true
   },
 
-  hotspotCode: {
-    type: String,
-    unique: true
-  },
+  location: String,
 
-  routerHost: String,
+  // hotspotCode: {
+  //   type: String,
+  //   unique: true
+  // },
 
-  routerUser: String,
+  routerIp: String,
+  
+
+  routerUsername:String,
 
   routerPassword: String,
 

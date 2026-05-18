@@ -57,7 +57,7 @@ exports.registerDevice =  async ({
   } catch (error) {
 
     // console.log( "Register device error", error);
-    logger.error("Register device error", {
+  console.error("Register device error", {
       tenantId,
       hotspotId,
       error: error.message

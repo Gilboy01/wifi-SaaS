@@ -8,8 +8,8 @@ const { initiatePayment, mockSuccess } = require("../controllers/payment.control
 router.post("/initiate", initiatePayment);
 
 // NO AUTH for development purposes
-if (process.env.NODE_ENV === 'development') {
+// if (process.env.NODE_ENV === 'development') {
   router.post("/mock-success/:id", mockSuccess);
-}
+// }
 
 module.exports = router;

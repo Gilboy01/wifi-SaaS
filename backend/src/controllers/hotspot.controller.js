@@ -1,5 +1,5 @@
 const Hotspot = require("../models/hotspot.model");
-const bcrypt = require("bcrypt");
+
 exports.createHotspot = async (req, res) => {
 
   try {
@@ -9,7 +9,8 @@ exports.createHotspot = async (req, res) => {
       location,
       routerIp,
       routerUsername,
-      routerPassword
+      routerPassword,
+      routerPort
     } = req.body;
     // validate fields
     if (!name || !location || !routerIp || !routerUsername || !routerPassword) {
@@ -25,16 +26,16 @@ exports.createHotspot = async (req, res) => {
     });
   }
 
-  const hashedPassword = await bcrypt.hash(routerPassword, 10);
 
     const hotspot = await Hotspot.create({
 
         tenantId:req.user.tenantId,
         name,
         location,
-        routerIp,
-        routerUsername,
-        routerPassword:hashedPassword
+        routerIp: routerIp.trim(),
+        routerUsername: routerUsername.trim(),
+        routerPassword,
+        routerPort: routerPort || 8728
 
       });
 
@@ -46,6 +47,7 @@ exports.createHotspot = async (req, res) => {
      location: hotspot.location,
      routerIp: hotspot.routerIp,
      routerUsername: hotspot.routerUsername,
+     routerPort: hotspot.routerPort,
      tenantId: hotspot.tenantId
    }
 

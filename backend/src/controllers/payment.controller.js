@@ -27,8 +27,7 @@ exports.initiatePayment = async (req, res) => {
 
 }
 
-     // derive tenant from package
-    const tenantId = pkg.tenantId;
+   
 
     const externalId = uuidv4();
 
@@ -38,7 +37,7 @@ exports.initiatePayment = async (req, res) => {
       hotspotId,
       isActive: true
     });
-
+    
     if (!pkg) {
 
       return res.status(404).json({
@@ -47,6 +46,9 @@ exports.initiatePayment = async (req, res) => {
       });
 
     }
+
+      // derive tenant from package
+    const tenantId = pkg.tenantId;
 
     const uppercaseMAC = macAddress.toUpperCase().trim();
 
@@ -161,11 +163,11 @@ exports.mockSuccess = async (req, res) => {
 
     }
 
-    if (payment.status === "failed") {
+    if (payment.status === "failed" || payment.status === "inactive") {
 
   return res.status(400).json({
     success: false,
-    message: "Cannot process failed payment"
+    message: "Cannot process failed / inactive payment"
   });
 
 }

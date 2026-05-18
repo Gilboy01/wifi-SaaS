@@ -1,13 +1,15 @@
-// config/router.config.js
-
 module.exports = {
 
-  host: process.env.ROUTER_HOST,
+  defaultPort: 8728,
 
-  user: process.env.ROUTER_USER,
+  connectionTimeout: 5000,
 
-  password: process.env.ROUTER_PASSWORD,
+  retryAttempts: 3,
 
-  port: process.env.ROUTER_PORT || 8728
+  retryDelay: 2000,
+
+  apiVersion: "routeros"
 
 };
+
+// currently not useful
