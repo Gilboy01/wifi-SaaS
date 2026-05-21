@@ -14,6 +14,7 @@ import DevicesPage from "./pages/dashboard/DevicesPage";
 import StaffPage from "./pages/dashboard/StaffPage";
 
 import ProtectedRoute from "./routes/ProtectedRoute";
+import RoleProtectedRoute from "./routes/RoleProtectedRoute";
 
 function App() {
   return (
@@ -34,12 +35,33 @@ function App() {
             }
           >
             <Route index element={<DashboardHome />} />
-            <Route path="hotspots" element={<HotspotsPage />} />
+            <Route
+              path="hotspots"
+              element={
+                <RoleProtectedRoute allowedRoles={["admin"]}>
+                  <HotspotsPage />
+                </RoleProtectedRoute>
+              }
+            />
             <Route path="packages" element={<PackagesPage />} />
             <Route path="sessions" element={<SessionsPage />} />
-            <Route path="payments" element={<PaymentsPage />} />
+            <Route
+              path="payments"
+              element={
+                <RoleProtectedRoute allowedRoles={["admin"]}>
+                  <PaymentsPage />
+                </RoleProtectedRoute>
+              }
+            />
             <Route path="devices" element={<DevicesPage />} />
-            <Route path="staff" element={<StaffPage />} />
+            <Route
+              path="staff"
+              element={
+                <RoleProtectedRoute allowedRoles={["admin"]}>
+                  <StaffPage />
+                </RoleProtectedRoute>
+              }
+            />
           </Route>
         </Routes>
       </BrowserRouter>

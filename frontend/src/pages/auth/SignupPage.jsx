@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+
+import { useAuth } from "../../context/AuthContext";
 
 import api from "../../api/axios";
 
@@ -11,11 +14,15 @@ const SignupPage = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  const { loading, setUser, setLoading } = useAuth();
+  const navigate = useNavigate();
+
   // signup handler
   const handleSignup = async (e) => {
     e.preventDefault();
 
     try {
+      setLoading(true);
       if (confirmPassword !== password) {
         return toast.error("Passwords do not match");
       }
@@ -28,17 +35,22 @@ const SignupPage = () => {
       });
 
       toast.success(res.data.message || "Registered successfully");
-      console.log(res.data);
+      // console.log(res.data);
+      setUser(res.data.user);
 
       setBusinnessName("");
       setName("");
       setEmail("");
       setPassword("");
       setConfirmPassword("");
+
+      navigate("/dashboard");
     } catch (error) {
       const message = error?.response?.data?.message || "Registration failed";
       toast.error(message);
       console.log(error.response?.data || error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -55,7 +67,7 @@ const SignupPage = () => {
             mb-4
           "
         >
-          Signup / Register businness
+          Register business
         </h1>
 
         <input
@@ -131,8 +143,9 @@ const SignupPage = () => {
             text-white
             p-2
           "
+          disabled={loading}
         >
-          Register
+          {loading ? <>Loding...</> : <>Register</>}
         </button>
 
         <p className="mt-8 text-center text-sm text-gray-500">
