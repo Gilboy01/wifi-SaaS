@@ -13,6 +13,8 @@ import PaymentsPage from "./pages/dashboard/PaymentsPage";
 import DevicesPage from "./pages/dashboard/DevicesPage";
 import StaffPage from "./pages/dashboard/StaffPage";
 
+import ProtectedRoute from "./routes/ProtectedRoute";
+
 function App() {
   return (
     <>
@@ -23,7 +25,14 @@ function App() {
           <Route path="/register" element={<SignupPage />} />
 
           {/* DASHBOARD ROUTES WITH LAYOUT */}
-          <Route path="/dashboard" element={<DashboardLayout />}>
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <DashboardLayout />
+              </ProtectedRoute>
+            }
+          >
             <Route index element={<DashboardHome />} />
             <Route path="hotspots" element={<HotspotsPage />} />
             <Route path="packages" element={<PackagesPage />} />

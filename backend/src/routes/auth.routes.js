@@ -8,7 +8,7 @@ router.post("/register", register);
 router.post("/login", login);
 router.post("/logout", logout);
 
-router.get("/", authMiddleware, getProfile );
+router.get("/profile", authMiddleware, getProfile );
 // implement function to refresh token after 1 hour
 // router.get("/auth/refresh", refresh-token);
 

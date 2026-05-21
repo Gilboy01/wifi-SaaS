@@ -2,12 +2,20 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-hot-toast";
 
+import { useAuth } from "../../context/AuthContext";
+
+import { useNavigate } from "react-router-dom";
+
 import api from "../../api/axios";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
 
   const [password, setPassword] = useState("");
+
+  const { setUser } = useAuth();
+
+  const navigate = useNavigate();
 
   // login handler
   const handleLogin = async (e) => {
@@ -20,9 +28,13 @@ const LoginPage = () => {
       });
 
       toast.success(res.data.message || "Logged in successfully");
-      console.log(res.data);
+      // console.log(res.data);
+      setUser(res.data.user);
+
       setEmail("");
       setPassword("");
+
+      navigate("/dashboard");
     } catch (error) {
       const message = error?.response?.data?.message || "Login failed";
       toast.error(message);
