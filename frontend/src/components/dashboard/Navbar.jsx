@@ -1,5 +1,5 @@
+import { toast } from "react-hot-toast";
 import { useAuth } from "../../context/AuthContext";
-
 import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
@@ -9,7 +9,7 @@ const Navbar = () => {
 
   const handleLogout = async () => {
     await logout();
-
+    toast.success("Logged out successfully");
     navigate("/login");
   };
   return (

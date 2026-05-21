@@ -1,25 +1,24 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-hot-toast";
+// import { Loader, LogIn } from "lucide-react";
 
 import { useAuth } from "../../context/AuthContext";
-
 import { useNavigate } from "react-router-dom";
 
 import api from "../../api/axios";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
-
   const [password, setPassword] = useState("");
-
-  const { setUser } = useAuth();
+  const { setUser, loading, setLoading } = useAuth();
 
   const navigate = useNavigate();
 
   // login handler
   const handleLogin = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     try {
       const res = await api.post("/auth/login", {
@@ -28,7 +27,6 @@ const LoginPage = () => {
       });
 
       toast.success(res.data.message || "Logged in successfully");
-      // console.log(res.data);
       setUser(res.data.user);
 
       setEmail("");
@@ -39,6 +37,8 @@ const LoginPage = () => {
       const message = error?.response?.data?.message || "Login failed";
       toast.error(message);
       console.log(error.response?.data || error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -94,8 +94,9 @@ const LoginPage = () => {
             text-white
             p-2
           "
+            disabled={loading}
           >
-            Login
+            {loading ? <>Loading...</> : <>Login</>}
           </button>
 
           <p className="mt-8 text-center text-sm text-gray-500">
