@@ -20,6 +20,7 @@ const hotspotSchema = new mongoose.Schema({
   // hotspotCode: {
   //   type: String,
   //   unique: true
+    
   // },
 
   routerIp: String,

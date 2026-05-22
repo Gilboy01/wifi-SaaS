@@ -14,9 +14,9 @@ const DashboardLayout = () => {
     "
     >
       <Sidebar />
-      <div className="flex-1">
+      <div className="flex-1 ml-64">
         <Navbar />
-        <div className="p-6">
+        <div className="p-6 pt-16">
           <Outlet />
           {/*
           we use outlet because nested routes render here.

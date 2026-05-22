@@ -41,7 +41,7 @@ app.use("/api/packages", packageRoutes);
 app.use("/api/payments", paymentLimiter, paymentRoutes);
 app.use("/api/sessions", sessionRoutes);
 app.use("/api/users", userRoutes);
-app.use("/api/hotspot", hotspotRoutes);
+app.use("/api/hotspots", hotspotRoutes);
 
 
 const PORT = process.env.PORT || 5000;

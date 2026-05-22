@@ -10,11 +10,11 @@ exports.generateToken = (userId, tenantId, role, res) =>{
     }
 
     const token = jwt.sign({userId, tenantId, role}, JWT_SECRET, {
-        expiresIn: "1d",
+        expiresIn: "7d",
     });
 
     res.cookie("jwt", token, {
-        maxAge: 1*24*60*60*1000, //ms
+        maxAge: 7*24*60*60*1000, //ms
         httpOnly: true, // prevent XSS attack
         sameSite: "strict", //CRSF attacks prevention
         secure: process.env.NODE_ENV === "development" ? false : true,

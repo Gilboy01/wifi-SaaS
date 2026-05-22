@@ -65,6 +65,7 @@ exports.createHotspot = async (req, res) => {
 
 };
 
+//Get all hotspots 
 exports.getAllHotspots = async(req,res) => {
   try {
       // Verify authentication
@@ -87,7 +88,7 @@ exports.getAllHotspots = async(req,res) => {
 
     return res.status(200).json({
       success: true,
-      hotspots
+      data: hotspots
     })
   } catch (error) {
     console.log("Error in getAllHotspots controller", error)
@@ -98,6 +99,7 @@ exports.getAllHotspots = async(req,res) => {
   }
 }
 
+// Get a particular Hotspot
 exports.getHotspot = async(req, res) => {
   try {
      // Verify authentication
@@ -142,6 +144,7 @@ exports.getHotspot = async(req, res) => {
   }
 }
 
+// update hotspot
 exports.updateHotspot = async(req, res) => {
   try {
      // Verify authentication

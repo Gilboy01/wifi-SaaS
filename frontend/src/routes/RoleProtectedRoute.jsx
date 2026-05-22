@@ -1,5 +1,4 @@
 import { Navigate } from "react-router-dom";
-
 import { useAuth } from "../context/AuthContext";
 
 const RoleProtectedRoute = ({ children, allowedRoles }) => {
@@ -13,13 +12,13 @@ const RoleProtectedRoute = ({ children, allowedRoles }) => {
     );
   }
 
-  if (!user) {
-    return <Navigate to="/login" replace />;
-  }
+  // if (!user) {
+  //   return <Navigate to="/login" />;
+  // }
 
-  const isAuthorized = allowedRoles.includes(user.role);
-  if (!isAuthorized) {
-    return <Navigate to="/dashboard" replace />;
+  const isAuthorized = allowedRoles.includes(user?.role);
+  if (user && !isAuthorized) {
+    return <Navigate to="/unauthorized" />;
   }
 
   return children;

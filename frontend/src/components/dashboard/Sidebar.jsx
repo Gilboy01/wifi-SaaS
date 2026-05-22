@@ -69,11 +69,16 @@ const Sidebar = () => {
   return (
     <div
       className="
+      fixed
+      left-0
+      top-0
+      bottom-0
       w-64
       bg-black
       text-white
-      min-h-screen
       p-4
+      z-40
+      overflow-y-auto
     "
     >
       <h1
