@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import EditHotspotModal from "../hotspot/EditHotspotModal";
 
 import api from "../../api/axios";
 
@@ -14,6 +15,9 @@ const HotspotsPage = () => {
     routerPassword: "",
     routerPort: "",
   });
+
+  const [selectedHotspot, setSelectedHotspot] = useState(null);
+  const [showEditModal, setShowEditModal] = useState(false);
 
   // fetch hotspots
   const fetchHotspots = async () => {
@@ -91,27 +95,28 @@ const HotspotsPage = () => {
   };
 
   return (
-    <div>
-      <div
-        className="
+    <>
+      <div>
+        <div
+          className="
           flex
           items-center
           justify-between
           mb-6
         "
-      >
-        <h1
-          className="
+        >
+          <h1
+            className="
             text-3xl
             font-bold
           "
-        >
-          Create Hotspot
-        </h1>
-      </div>
-      <form
-        onSubmit={handleSubmit}
-        className="
+          >
+            Create Hotspot
+          </h1>
+        </div>
+        <form
+          onSubmit={handleSubmit}
+          className="
           bg-white
           p-6
           rounded-xl
@@ -122,64 +127,64 @@ const HotspotsPage = () => {
           gap-4
           auto-rows-max
         "
-      >
-        <input
-          type="text"
-          name="name"
-          placeholder="Hotspot Name"
-          value={formData.name}
-          onChange={handleChange}
-          className="border p-3 rounded-lg"
-        />
+        >
+          <input
+            type="text"
+            name="name"
+            placeholder="Hotspot Name"
+            value={formData.name}
+            onChange={handleChange}
+            className="border p-3 rounded-lg"
+          />
 
-        <input
-          type="text"
-          name="location"
-          placeholder="Location"
-          value={formData.location}
-          onChange={handleChange}
-          className="border p-3 rounded-lg"
-        />
+          <input
+            type="text"
+            name="location"
+            placeholder="Location"
+            value={formData.location}
+            onChange={handleChange}
+            className="border p-3 rounded-lg"
+          />
 
-        <input
-          type="text"
-          name="routerIp"
-          placeholder="Router IP"
-          value={formData.routerIp}
-          onChange={handleChange}
-          className="border p-3 rounded-lg"
-        />
+          <input
+            type="text"
+            name="routerIp"
+            placeholder="Router IP"
+            value={formData.routerIp}
+            onChange={handleChange}
+            className="border p-3 rounded-lg"
+          />
 
-        <input
-          type="text"
-          name="routerUsername"
-          placeholder="Router Username"
-          value={formData.routerUsername}
-          onChange={handleChange}
-          className="border p-3 rounded-lg"
-        />
+          <input
+            type="text"
+            name="routerUsername"
+            placeholder="Router Username"
+            value={formData.routerUsername}
+            onChange={handleChange}
+            className="border p-3 rounded-lg"
+          />
 
-        <input
-          type="password"
-          name="routerPassword"
-          placeholder="Router Password"
-          value={formData.routerPassword}
-          onChange={handleChange}
-          className="border p-3 rounded-lg"
-        />
+          <input
+            type="password"
+            name="routerPassword"
+            placeholder="Router Password"
+            value={formData.routerPassword}
+            onChange={handleChange}
+            className="border p-3 rounded-lg"
+          />
 
-        <input
-          type="number"
-          name="routerPort"
-          placeholder="Router Port"
-          value={formData.routerPort}
-          onChange={handleChange}
-          className="border p-3 rounded-lg"
-        />
+          <input
+            type="number"
+            name="routerPort"
+            placeholder="Router Port"
+            value={formData.routerPort}
+            onChange={handleChange}
+            className="border p-3 rounded-lg"
+          />
 
-        <button
-          type="submit"
-          className="
+          <button
+            type="submit"
+            className="
             col-span-2
             bg-black
             text-white
@@ -189,76 +194,76 @@ const HotspotsPage = () => {
             mx-auto
             mt-4
           "
-          disabled={loading}
-        >
-          {loading ? <>Loading...</> : <>Create Hotspot</>}
-        </button>
-      </form>
+            disabled={loading}
+          >
+            {loading ? <>Loading...</> : <>Create Hotspot</>}
+          </button>
+        </form>
 
-      <div
-        className="
+        <div
+          className="
           flex
           items-center
           justify-center
           mb-6
         "
-      >
-        <h1
-          className="
+        >
+          <h1
+            className="
             text-2xl
             font-bold
           "
-        >
-          Hotspots
-        </h1>
-      </div>
-
-      {loading ? (
-        <p>Loading hotspots...</p>
-      ) : hotspots.length === 0 ? (
-        <div className="bg-white p-6 rounded-xl shadow-md text-center">
-          <p className="text-gray-600">
-            No hotspots exist yet. Create one to start managing your network.
-          </p>
+          >
+            Hotspots
+          </h1>
         </div>
-      ) : (
-        <div
-          className="
+
+        {loading ? (
+          <p>Loading hotspots...</p>
+        ) : hotspots.length === 0 ? (
+          <div className="bg-white p-6 rounded-xl shadow-md text-center">
+            <p className="text-gray-600">
+              No hotspots exist yet. Create one to start managing your network.
+            </p>
+          </div>
+        ) : (
+          <div
+            className="
               grid
               grid-cols-1
               md:grid-cols-2
               lg:grid-cols-3
               gap-6
             "
-        >
-          {hotspots.map((hotspot) => (
-            <div
-              key={hotspot._id}
-              className="
+          >
+            {hotspots.map((hotspot) => (
+              <div
+                key={hotspot._id}
+                className="
                     bg-white
                     p-6
                     rounded-xl
                     shadow-md
                   "
-            >
-              <h2
-                className="
+              >
+                <h2
+                  className="
                       text-xl
                       font-bold
                       mb-2
                     "
-              >
-                Hotspot: {hotspot.name}
-              </h2>
-              <p>Location: {hotspot.location}</p>
-              <p>RouterIp: {hotspot.routerIp}</p>
-              <p>Username: {hotspot.routerUsername}</p>
-              <p>Password: {hotspot.routerPassword}</p>
-              <p>Port: {hotspot.routerPort}</p>
+                >
+                  Hotspot: {hotspot.name}
+                </h2>
+                <p>Location: {hotspot.location}</p>
+                <p>RouterIp: {hotspot.routerIp}</p>
+                <p>Username: {hotspot.routerUsername}</p>
+                <p>Password: {hotspot.routerPassword}</p>
+                <p>Port: {hotspot.routerPort}</p>
 
-              <button
-                onClick={() => handleDelete(hotspot._id)}
-                className="
+                <button
+                  onClick={() => handleDelete(hotspot._id)}
+                  className="
                       mt-4
                       bg-red-500
                       text-white
@@ -266,14 +271,40 @@ const HotspotsPage = () => {
                       py-2
                       rounded-lg
                     "
-              >
-                Delete
-              </button>
-            </div>
-          ))}
-        </div>
+                >
+                  Delete
+                </button>
+
+                <button
+                  onClick={() => {
+                    setSelectedHotspot(hotspot);
+                    setShowEditModal(true);
+                  }}
+                  className="
+                mt-4
+              bg-green-500
+              text-white
+                px-4
+                py-2
+                rounded-lg
+                ml-6"
+                >
+                  Edit
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {showEditModal && selectedHotspot && (
+        <EditHotspotModal
+          hotspot={selectedHotspot}
+          onClose={() => setShowEditModal(false)}
+          onUpdated={fetchHotspots}
+        />
       )}
-    </div>
+    </>
   );
 };
 
