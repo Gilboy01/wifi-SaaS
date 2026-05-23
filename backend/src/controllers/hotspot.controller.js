@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 const Hotspot = require("../models/hotspot.model");
+const { v4: uuidv4 } = require("uuid");
 
+// create hotspot controller
 exports.createHotspot = async (req, res) => {
 
   try {
@@ -27,7 +29,8 @@ exports.createHotspot = async (req, res) => {
     });
   }
 
-
+// hotspot code generated for user after paying
+  const hotspotCode = `HS-${uuidv4().slice(0, 6)}`;
     const hotspot = await Hotspot.create({
 
         tenantId:req.user.tenantId,
@@ -36,7 +39,8 @@ exports.createHotspot = async (req, res) => {
         routerIp: routerIp.trim(),
         routerUsername: routerUsername.trim(),
         routerPassword,
-        routerPort: routerPort || 8728
+        routerPort: routerPort || 8728,
+        hotspotCode
 
       });
 
@@ -49,7 +53,8 @@ exports.createHotspot = async (req, res) => {
      routerIp: hotspot.routerIp,
      routerUsername: hotspot.routerUsername,
      routerPort: hotspot.routerPort,
-     tenantId: hotspot.tenantId
+     tenantId: hotspot.tenantId,
+     hotspotCode: hotspot.hotspotCode
    }
 
     });
@@ -238,10 +243,14 @@ exports.updateHotspot = async(req, res) => {
           },
           // req.body,
           updates,
-          {
-            new: true,
+          // {
+          //   new: true,
+            
+          // },
+           {
+            returnDocument: "after",
             runValidators: true
-          }
+            }
         );
 
           if (!hotspot) {

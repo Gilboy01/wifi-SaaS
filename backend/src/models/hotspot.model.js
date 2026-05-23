@@ -17,11 +17,11 @@ const hotspotSchema = new mongoose.Schema({
 
   location: String,
 
-  // hotspotCode: {
-  //   type: String,
-  //   unique: true
-    
-  // },
+  hotspotCode: {
+    type: String,
+    unique: true,
+    required: true
+  },
 
   routerIp: String,
   

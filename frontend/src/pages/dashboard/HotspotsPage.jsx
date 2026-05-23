@@ -62,7 +62,9 @@ const HotspotsPage = () => {
     setLoading(true);
     try {
       await api.post("/hotspots/", formData);
+      fetchHotspots();
       toast.success("Hotspot added successfully");
+
       setFormData({
         name: "",
         location: "",
@@ -260,6 +262,14 @@ const HotspotsPage = () => {
                 <p>Username: {hotspot.routerUsername}</p>
                 <p>Password: {hotspot.routerPassword}</p>
                 <p>Port: {hotspot.routerPort}</p>
+                <p>
+                  IsActive:
+                  {hotspot.isActive ? (
+                    <span className=" text-green-600">True</span>
+                  ) : (
+                    <span className=" text-red-400">False</span>
+                  )}
+                </p>
 
                 <button
                   onClick={() => handleDelete(hotspot._id)}

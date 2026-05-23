@@ -1,4 +1,5 @@
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 import api from "../../api/axios";
 
@@ -10,6 +11,7 @@ const EditHotspotModal = ({ hotspot, onClose, onUpdated }) => {
     routerUsername: hotspot.routerUsername || "",
     routerPassword: "",
     routerPort: hotspot.routerPort || "",
+    isActive: hotspot.isActive || true,
   });
 
   const [loading, setLoading] = useState(false);
@@ -33,8 +35,10 @@ const EditHotspotModal = ({ hotspot, onClose, onUpdated }) => {
       onUpdated();
 
       onClose();
+      toast.success("Updated successfully");
     } catch (error) {
       console.log(error);
+      toast.error("Server error");
     } finally {
       setLoading(false);
     }
@@ -152,6 +156,22 @@ const EditHotspotModal = ({ hotspot, onClose, onUpdated }) => {
               New Router Password
             "
             value={formData.routerPassword}
+            onChange={handleChange}
+            className="
+              w-full
+              border
+              p-3
+              rounded-lg
+            "
+          />
+
+          <input
+            type="boolean"
+            name="isActive"
+            placeholder="
+              Hotspot Active status(true/false)
+            "
+            value={formData.isActive}
             onChange={handleChange}
             className="
               w-full
