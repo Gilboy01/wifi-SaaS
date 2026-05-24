@@ -9,7 +9,7 @@ const EditHotspotModal = ({ hotspot, onClose, onUpdated }) => {
     location: hotspot.location || "",
     routerIp: hotspot.routerIp || "",
     routerUsername: hotspot.routerUsername || "",
-    routerPassword: "",
+    routerPassword: hotspot.routerPassword || "",
     routerPort: hotspot.routerPort || "",
     isActive: hotspot.isActive ?? true,
   });
@@ -37,8 +37,7 @@ const EditHotspotModal = ({ hotspot, onClose, onUpdated }) => {
       onClose();
       toast.success("Updated successfully");
     } catch (error) {
-      console.log(error);
-      toast.error("Server error");
+      toast.error(error?.response?.data?.message || "Server error");
     } finally {
       setLoading(false);
     }

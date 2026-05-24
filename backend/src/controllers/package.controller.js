@@ -19,6 +19,7 @@ exports.createPackage = async (req, res) => {
       price,
       duration,
       hotspotId,
+      isActive = true
     } = req.body;
 
     
@@ -31,14 +32,18 @@ exports.createPackage = async (req, res) => {
     }
 
     // Validate data types and ranges
-    if (typeof price !== 'number' || price <= 0) {
+    // check price is number
+    const parsedPrice = Number(price);
+if (Number.isNaN(parsedPrice) || parsedPrice <= 0) {
+      // console.log("error in validate price");
       return res.status(400).json({
         success: false,
         message: "Price must be a positive number"
       });
     }
-
-    if (typeof duration !== 'number' || duration <= 0) {
+// check duration is number
+    const parsedDuration = Number(duration);
+if (Number.isNaN(parsedDuration) || parsedDuration <= 0) {
       return res.status(400).json({
         success: false,
         message: "Duration must be a positive number"
@@ -51,7 +56,8 @@ exports.createPackage = async (req, res) => {
       hotspotId,
       name,
       price,
-      duration,
+      duration: parsedDuration,
+      isActive
     });
 
     res.status(201).json({

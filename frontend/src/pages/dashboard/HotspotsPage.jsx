@@ -77,7 +77,7 @@ const HotspotsPage = () => {
       fetchHotspots();
     } catch (error) {
       console.log(error);
-      toast.error("Server error");
+      toast.error(error?.response?.data?.message || "Server error");
     } finally {
       setLoading(false);
     }
@@ -92,7 +92,7 @@ const HotspotsPage = () => {
       fetchHotspots();
     } catch (error) {
       console.log(error);
-      toast.error("Server error");
+      toast.error(error?.response?.data?.message || "Server error");
     }
   };
 
@@ -260,7 +260,7 @@ const HotspotsPage = () => {
                 <p>Location: {hotspot.location}</p>
                 <p>RouterIp: {hotspot.routerIp}</p>
                 <p>Username: {hotspot.routerUsername}</p>
-                <p>Password: {hotspot.routerPassword}</p>
+                <p>Password: ******</p>
                 <p>Port: {hotspot.routerPort}</p>
                 <p>
                   Status:
