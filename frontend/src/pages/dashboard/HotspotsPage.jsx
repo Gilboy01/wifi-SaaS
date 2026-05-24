@@ -263,11 +263,11 @@ const HotspotsPage = () => {
                 <p>Password: {hotspot.routerPassword}</p>
                 <p>Port: {hotspot.routerPort}</p>
                 <p>
-                  IsActive:
+                  Status:
                   {hotspot.isActive ? (
-                    <span className=" text-green-600">True</span>
+                    <span className=" text-green-600">Active</span>
                   ) : (
-                    <span className=" text-red-400">False</span>
+                    <span className=" text-red-400">Offline</span>
                   )}
                 </p>
 

@@ -11,7 +11,7 @@ const EditHotspotModal = ({ hotspot, onClose, onUpdated }) => {
     routerUsername: hotspot.routerUsername || "",
     routerPassword: "",
     routerPort: hotspot.routerPort || "",
-    isActive: hotspot.isActive || true,
+    isActive: hotspot.isActive ?? true,
   });
 
   const [loading, setLoading] = useState(false);
@@ -165,21 +165,26 @@ const EditHotspotModal = ({ hotspot, onClose, onUpdated }) => {
             "
           />
 
-          <input
-            type="boolean"
+          <select
             name="isActive"
-            placeholder="
-              Hotspot Active status(true/false)
-            "
-            value={formData.isActive}
-            onChange={handleChange}
+            value={String(formData.isActive)}
+            onChange={(e) =>
+              setFormData({
+                ...formData,
+                isActive: e.target.value === "true",
+              })
+            }
             className="
-              w-full
-              border
-              p-3
-              rounded-lg
-            "
-          />
+            w-full
+            border
+            p-3
+            rounded-lg
+          "
+          >
+            <option value="true">Active</option>
+
+            <option value="false">Inactive</option>
+          </select>
 
           <input
             type="number"
