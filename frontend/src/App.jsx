@@ -4,6 +4,7 @@ import { Toaster } from "react-hot-toast";
 import LoginPage from "./pages/auth/LoginPage";
 import SignupPage from "./pages/auth/SignupPage";
 import UnauthorizedPage from "./pages/UnauthorizedPage";
+import CustomerPortal from "./pages/portal/CustomerPortal";
 
 import DashboardLayout from "./layouts/dashboard/DashboardLayout";
 import DashboardHome from "./pages/dashboard/DashboardHome";
@@ -26,6 +27,7 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<SignupPage />} />
           <Route path="/unauthorized" element={<UnauthorizedPage />} />
+          <Route index path="/portal/:hotspotId" element={<CustomerPortal />} />
 
           {/* DASHBOARD ROUTES WITH LAYOUT */}
           <Route
