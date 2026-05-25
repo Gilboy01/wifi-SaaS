@@ -219,26 +219,28 @@ exports.updatePackage = async (req, res) => {
     }
 
       // Validate updates
-    if (updates.price !== undefined && (typeof updates.price !== 'number' || updates.price <= 0)) {
+       const parsedPrice = Number(updates.price);
+if  (Number.isNaN(parsedPrice) || parsedPrice <= 0){
+    // if (updates.price !== undefined && (typeof updates.price !== 'number' || updates.price <= 0)) {
       return res.status(400).json({
         success: false,
         message: "Price must be a positive number"
       });
     }
-
-     if (updates.duration !== undefined && (typeof updates.duration !== 'number' || updates.duration <= 0)) {
+const parsedDuration = Number(updates.duration);
+     if  (Number.isNaN(parsedDuration) || parsedDuration <= 0) {
       return res.status(400).json({
         success: false,
         message: "Duration must be a positive number"
       });
     }
 
-       if (updates.isActive !== undefined && typeof updates.isActive !== 'boolean') {
-      return res.status(400).json({
-        success: false,
-        message: "isActive must be a boolean"
-      });
-    }
+    //    if (updates.isActive !== undefined && typeof updates.isActive !== 'boolean') {
+    //   return res.status(400).json({
+    //     success: false,
+    //     message: "isActive must be a boolean"
+    //   });
+    // }
 
     if (Object.keys(updates).length === 0) {
       return res.status(400).json({
