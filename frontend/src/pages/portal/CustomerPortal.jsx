@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 import api from "../../api/axios";
+import { useSearchParams } from "react-router-dom";
 
 const CustomerPortal = () => {
   const { hotspotId } = useParams();
@@ -19,6 +20,8 @@ const CustomerPortal = () => {
     } catch (error) {
       console.log(error);
       toast.error("Hotspot not found");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -36,17 +39,23 @@ const CustomerPortal = () => {
     }
   };
 
+  // load on app start
   useEffect(() => {
     fetchHotspot();
     fetchPackages();
   }, [hotspotId]);
 
+  // for searching mac address from url
+  const [searchParams] = useSearchParams();
+
+  // select package
   const handleSelect = (pkg) => {
     setSelectedPackage(pkg);
   };
 
   //   continue to next step
-  const handleContinue = () => {
+  const handleContinue = async () => {
+    setLoading(true);
     if (!selectedPackage) {
       toast.error("Select package");
       return;
@@ -57,114 +66,134 @@ const CustomerPortal = () => {
       return;
     }
 
-    console.log({
-      hotspotId,
-      packageId: selectedPackage._id,
-      phone,
-    });
+    // got ftom url
+    const macAddress = searchParams.get("mac");
 
-    toast.success("Proceeding to payment");
+    try {
+      const res = await api.post("/payments/initiate", {
+        hotspotId,
+        packageId: selectedPackage._id,
+        phoneNumber: phone,
+        macAddress,
+      });
+
+      toast.success("Proceeding to payment");
+      console.log(res.data);
+    } catch (error) {
+      toast.error(error.response?.data?.message || "payment failed");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div
-      className="
+    <>
+      {loading ? (
+        <div
+          className="text-3xl 
+    flex items-center justify-center"
+        >
+          loading...
+        </div>
+      ) : (
+        <div
+          className="
       min-h-screen
       bg-gray-100
       p-6
     "
-    >
-      <div
-        className="
+        >
+          <div
+            className="
     max-w-3xl
     mx-auto
   "
-      >
-        <h1
-          className="
+          >
+            <h1
+              className="
       text-2xl
       font-bold
       mb-2
     "
-        >
-          {hotspot?.name}
-        </h1>
+            >
+              {hotspot?.name} hotspot
+            </h1>
 
-        <p
-          className="
+            <p
+              className="
       text-gray-500
       mb-6
     "
-        >
-          Choose your package
-        </p>
+            >
+              Choose your package
+            </p>
 
-        <div
-          className="
+            <div
+              className="
     grid
     gap-4
   "
-        >
-          {packages.map((pkg) => (
-            <div
-              key={pkg._id}
-              onClick={() => handleSelect(pkg)}
-              className={`
+            >
+              {packages.map((pkg) => (
+                <div
+                  key={pkg._id}
+                  onClick={() => handleSelect(pkg)}
+                  className={`
         p-5
         rounded-xl
         cursor-pointer
         border
-
         ${
           selectedPackage?._id === pkg._id
             ? "border-black bg-white"
             : "bg-white"
         }
       `}
-            >
-              <h2>{pkg.name}</h2>
+                >
+                  <h2>{pkg.name}</h2>
 
-              <p>UGX {pkg.price}</p>
+                  <p>UGX {pkg.price}</p>
 
-              <p>
-                {pkg.duration}
-                mins
-              </p>
+                  <p>
+                    {pkg.duration}
+                    mins
+                  </p>
+                </div>
+              ))}
             </div>
-          ))}
+
+            <input
+              type="text"
+              placeholder="07xxxxxxxx"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              className="
+            w-full
+            border
+            p-3
+            rounded-lg
+            mt-6
+          "
+            />
+
+            <button
+              onClick={handleContinue}
+              disabled={loading}
+              className="
+          w-full
+          bg-black
+          text-white
+          p-4
+          rounded-xl
+          mt-4
+        "
+            >
+              {loading ? <>loading..</> : <>Continue to Payment</>}
+            </button>
+          </div>
         </div>
-
-        <input
-          type="text"
-          placeholder="
-    07xxxxxxxx
-  "
-          value={phone}
-          onChange={(e) => setPhone(e.target.value)}
-          className="
-    w-full
-    border
-    p-3
-    rounded-lg
-    mt-6
-  "
-        />
-
-        <button
-          onClick={handleContinue}
-          className="
-    w-full
-    bg-black
-    text-white
-    p-4
-    rounded-xl
-    mt-4
-  "
-        >
-          Continue to Payment
-        </button>
-      </div>
-    </div>
+      )}
+    </>
   );
 };
 
