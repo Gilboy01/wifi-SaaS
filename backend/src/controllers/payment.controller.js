@@ -143,6 +143,13 @@ exports.mockSuccess = async (req, res) => {
   try {
 
     const payment = await Payment.findById( req.params.id );
+    
+    if (!req.params.id) {
+    return res.status(400).json({
+    success: false,
+    message: "Payment ID missing"
+  });
+}
 
     if (!payment) {
 

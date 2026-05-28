@@ -5,6 +5,8 @@ import LoginPage from "./pages/auth/LoginPage";
 import SignupPage from "./pages/auth/SignupPage";
 import UnauthorizedPage from "./pages/UnauthorizedPage";
 import CustomerPortal from "./pages/portal/CustomerPortal";
+import ConfirmPayment from "./pages/portal/ConfirmPayment";
+import PaymentSuccess from "./pages/portal/PaymentSuccess";
 
 import DashboardLayout from "./layouts/dashboard/DashboardLayout";
 import DashboardHome from "./pages/dashboard/DashboardHome";
@@ -28,6 +30,8 @@ function App() {
           <Route path="/register" element={<SignupPage />} />
           <Route path="/unauthorized" element={<UnauthorizedPage />} />
           <Route index path="/portal/:hotspotId" element={<CustomerPortal />} />
+          <Route path="/confirm-payment" element={<ConfirmPayment />} />
+          <Route path="/payment-success" element={<PaymentSuccess />} />
 
           {/* DASHBOARD ROUTES WITH LAYOUT */}
           <Route

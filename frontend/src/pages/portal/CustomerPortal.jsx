@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 import api from "../../api/axios";
 import { useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const CustomerPortal = () => {
   const { hotspotId } = useParams();
@@ -11,6 +12,7 @@ const CustomerPortal = () => {
   const [selectedPackage, setSelectedPackage] = useState(null);
   const [phone, setPhone] = useState("");
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   //   fetch hotspot
   const fetchHotspot = async () => {
@@ -76,15 +78,47 @@ const CustomerPortal = () => {
         phoneNumber: phone,
         macAddress,
       });
-
-      toast.success("Proceeding to payment");
       console.log(res.data);
+      const payment = res.data?.payment;
+      // const paymentId = res.data?._id;
+
+      // go to confirm page
+      navigate("/confirm-payment", {
+        state: {
+          payment,
+          packageName: selectedPackage.name,
+        },
+      });
+
+      // await confirmPayment(paymentId);
     } catch (error) {
-      toast.error(error.response?.data?.message || "payment failed");
+      toast.error(error.response?.data?.message || "payment initiation failed");
     } finally {
       setLoading(false);
     }
   };
+
+  // confirm payment
+  // const confirmPayment = async (paymentId) => {
+  //   try {
+  //     const res = await api.post(`/payments/mock-success/${paymentId}`);
+
+  //     if (res.data.success) {
+  //       toast.success("Payment confirmed. Internet activated.");
+
+  //       console.log("Session:", res.data);
+
+  //       // optional redirect
+  //       // navigate("/success");
+  //     }
+  //   } catch (error) {
+  //     console.error(error);
+
+  //     toast.error(
+  //       error.response?.data?.message || "Payment confirmation failed",
+  //     );
+  //   }
+  // };
 
   return (
     <>
@@ -188,7 +222,7 @@ const CustomerPortal = () => {
           mt-4
         "
             >
-              {loading ? <>loading..</> : <>Continue to Payment</>}
+              Continue to Payment
             </button>
           </div>
         </div>
