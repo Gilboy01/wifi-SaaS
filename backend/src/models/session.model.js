@@ -19,15 +19,19 @@ const sessionSchema = new mongoose.Schema({
     ref: "Device"
   },
 
+  packageId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Package"
+  },
+
   macAddress: {
     type: String,
     required: true
   },
 
-  packageId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Package"
-  },
+   phoneNumber: String,
+
+
 
   startTime: {
     type: Date,
@@ -36,7 +40,6 @@ const sessionSchema = new mongoose.Schema({
 
   expiryTime: {
     type: Date,
-    required: true
   },
 
   status: {
