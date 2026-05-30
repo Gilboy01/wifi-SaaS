@@ -13,7 +13,7 @@ const hotspotRoutes = require("./src/routes/hotspot.routes");
 const publicRoutes = require( "./src/routes/public.routes");
 
 const rateLimit = require("express-rate-limit");
-
+require("./src/jobs/cron.job");
 require("dotenv").config();
 const app = express();
 
