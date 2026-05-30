@@ -94,20 +94,24 @@ exports.disconnectSession = async (req, res) => {
 exports.getHotspotSessions = async (req, res) => {
 
   try {
-     // Validate ObjectId format
-          if (!mongoose.Types.ObjectId.isValid(req.params.hotspotId)) {
-            return res.status(400).json({
-              success: false,
-              message: "Invalid hotspot ID format"
-            });
-          }
+    //  // Validate ObjectId format
+    //       if (!mongoose.Types.ObjectId.isValid(req.params.hotspotId)) {
+    //         return res.status(400).json({
+    //           success: false,
+    //           message: "Invalid hotspot ID format"
+    //         });
+    //       }
 
     const sessions = await Session.find({
         tenantId: req.user.tenantId,
-        hotspotId: req.params.hotspotId
       })
-      .populate("deviceId")
-      .populate("packageId");
+      .populate(
+            "packageId",
+            "name duration"
+          )
+          .sort({
+            createdAt: -1,
+          });
 
      
         //   check if sessions exist

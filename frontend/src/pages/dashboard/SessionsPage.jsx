@@ -8,7 +8,7 @@ const Sessions = () => {
   // fetch sessions
   const fetchSessions = async () => {
     try {
-      const res = await api.get("/sessions/active");
+      const res = await api.get("/sessions");
       setSessions(res.data.sessions);
     } catch {
       toast.error("Failed to load sessions");

@@ -17,7 +17,7 @@ router.get("/active", roleMiddleware("admin","staff"), getActiveSessions);
 
 
 // hotspot sessions
-router.get("/hotspot/:hotspotId",  roleMiddleware("admin"), getHotspotSessions);
+router.get("/",  roleMiddleware("admin"), getHotspotSessions);
 
 
 // disconnect session
