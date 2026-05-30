@@ -1,8 +1,11 @@
 
 
 const router = require("express").Router();
+const authMiddleware = require("../middleware/auth.middleware");
 
-const { initiatePayment, mockSuccess } = require("../controllers/payment.controller");
+const authorizeRoles = require("../middleware/role.middleware");
+
+const { initiatePayment, mockSuccess, getPayments } = require("../controllers/payment.controller");
 
 // NO AUTH customer initiates payment
 router.post("/initiate", initiatePayment);
@@ -12,4 +15,6 @@ router.post("/initiate", initiatePayment);
   router.post("/mock-success/:id", mockSuccess);
 // }
 
+// get payments
+router.get("/", authMiddleware, authorizeRoles("admin"), getPayments);
 module.exports = router;

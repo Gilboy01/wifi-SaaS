@@ -270,3 +270,30 @@ exports.mockSuccess = async (req, res) => {
   }
 
 };
+
+// view payments
+exports.getPayments = async (req, res) => {
+    try {
+      const payments = await Payment.find({
+          tenantId: req.user.tenantId,
+        })
+          .populate(
+            "packageId",
+            "name price"
+          )
+          .sort({
+            createdAt: -1,
+          });
+
+      res.json({
+        success: true,
+        payments,
+      });
+
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message:"Server error",
+      });
+    }
+  };
