@@ -2,6 +2,7 @@ const bcrypt = require("bcrypt");
 
 const User = require("../models/user.model");
 
+// CREATE STAFF
 exports.createStaff =  async (req, res) => {
 
   try {
@@ -75,6 +76,42 @@ res.status(500).json({
 
 }
 
+// GET STAFF
+exports.getStaff = async (req, res) => {
+    try {
+      const users = await User.find({
+          tenantId: req.user.tenantId,
+        }).select("-password");
+
+      res.json({
+        success: true,
+        users,
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: error.message,
+      });
+    }
+  };
+
+
+  // DELETE STAFF
+  exports.deleteStaff = async (req, res) => {
+    try {
+      await User.findByIdAndDelete( req.params.id);
+
+      res.json({
+        success: true,
+        message: "Staff deleted successfully",
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: error.message,
+      });
+    }
+  };
 
     
 
