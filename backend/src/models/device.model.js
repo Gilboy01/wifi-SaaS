@@ -64,7 +64,13 @@ const deviceSchema = new mongoose.Schema({
 
     default: 0
 
-  }
+  },
+
+  status: {
+  type: String,
+  enum: ["online", "offline"],
+  default: "online"
+},
 
 }, {
   timestamps: true

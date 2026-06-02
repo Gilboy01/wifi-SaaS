@@ -4,14 +4,17 @@ import { toast } from "react-hot-toast";
 
 const Sessions = () => {
   const [sessions, setSessions] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   // fetch sessions
   const fetchSessions = async () => {
     try {
       const res = await api.get("/sessions");
-      setSessions(res.data.sessions);
-    } catch {
-      toast.error("Failed to load sessions");
+      setSessions(res.data?.sessions || []);
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Failed to load sessions");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -26,10 +29,44 @@ const Sessions = () => {
       toast.success("Session disconnected");
 
       fetchSessions();
-    } catch {
-      toast.error("Disconnect failed");
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Disconnect failed");
     }
   };
+
+  // delete session
+  const deleteSession = async (id) => {
+    try {
+      await api.delete(`/sessions/delete/${id}`);
+      toast.success("session deleted successfully");
+
+      fetchSessions();
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Failed to delete session");
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="p-6">
+        <h2 className="text-2xl font-bold mb-6">Sessions</h2>
+        <div className="flex items-center justify-center">
+          <p>Loading sessions...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (sessions.length === 0) {
+    return (
+      <div className="p-6">
+        <h2 className="text-2xl font-bold mb-6">Sessions</h2>
+        <div className="flex items-center justify-center">
+          <h1 className="text-2xl font-bold">No sessions available</h1>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="p-6">
@@ -65,12 +102,19 @@ const Sessions = () => {
                   {session.status}
                 </td>
                 <td>
-                  {session.status === "active" && (
+                  {session.status === "active" ? (
                     <button
                       onClick={() => disconnect(session._id)}
                       className="bg-red-500 text-white px-3 py-1 rounded"
                     >
                       Disconnect
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => deleteSession(session._id)}
+                      className="bg-red-500 text-white px-3 py-1 rounded"
+                    >
+                      Delete
                     </button>
                   )}
                 </td>

@@ -1,5 +1,5 @@
 const Session = require("../models/session.model");
-
+const Device = require("../models/device.model")
 
 const { revokeInternetAccess } = require("../services/router.service");
 
@@ -15,12 +15,12 @@ exports.expireSessions = async () => {
     });
 
 
-  for (const session of expiredSessions) {
+    for (const session of expiredSessions) {
 
     try {
       await revokeInternetAccess({
-       macAddress: session.macAddress,
-       hotspotId: session.hotspotId 
+        hotspotId: session.hotspotId ,
+       macAddress: session.macAddress
       });
 
     session.status = "expired";
@@ -28,9 +28,19 @@ exports.expireSessions = async () => {
 
     console.log( `Expired ${session.macAddress}, Internet blocked`);
 
+    // update device
+    await Device.findOneAndUpdate(
+        {
+          hotspotId: session.hotspotId,
+          macAddress: session.macAddress
+        },
+        {
+          status: "offline"
+        }
+      );
    } catch (error) {
         console.error( `Failed to revoke internet access for ${session.macAddress}:`, error.message);  
-    }
+      }
 
     
   }

@@ -29,35 +29,29 @@ const Payments = () => {
         <table className="w-full border">
           <thead>
             <tr className="bg-gray-400">
-              <th>Phone</th>
-
-              <th>Package</th>
-
-              <th>Amount</th>
-
-              <th>Method</th>
-
-              <th>Status</th>
-
-              <th>Reference</th>
-
-              <th>Date</th>
+              <th className="w-1/4 px-4 py-2 text-left border">Phone</th>
+              <th className="w-1/4 px-4 py-2 text-left border">Package</th>
+              <th className="w-1/4 px-4 py-2 text-left border">Amount</th>
+              <th className="w-1/4 px-2 py-2 text-left border">Method</th>
+              <th className="w-1/4 px-4 py-2 text-left border">Status</th>
+              <th className="w-1/4 px-4 py-2 text-left border">Reference</th>
+              <th className="w-1/4 px-4 py-2 text-left border">Date</th>
             </tr>
           </thead>
 
           <tbody>
             {payments.map((payment) => (
               <tr key={payment._id} className="border-t">
-                <td>{payment.phoneNumber}</td>
-
-                <td>{payment.packageId?.name}</td>
-
-                <td>UGX {payment.amount}</td>
-
-                <td>{payment.provider}</td>
-
+                <td className="w-1/4 px-4 py-2 border">
+                  {payment.phoneNumber}
+                </td>
+                <td className="w-1/4 px-4 py-2 border">
+                  {payment.packageId?.name}
+                </td>
+                <td className="w-1/4 px-4 py-2 border">UGX {payment.amount}</td>
+                <td className="w-1/4 px-2 py-2 border">{payment.provider}</td>
                 <td
-                  className={`font-medium ${
+                  className={`font-medium w-1/4 px-4 py-2 border ${
                     payment.status === "success"
                       ? "text-green-500"
                       : payment.status === "pending"
@@ -68,9 +62,13 @@ const Payments = () => {
                   {payment.status}
                 </td>
 
-                <td>{payment.transactionId}</td>
+                <td className="w-1/4 px-4 py-2 border">
+                  {payment.transactionId}
+                </td>
 
-                <td>{new Date(payment.createdAt).toLocaleString()}</td>
+                <td className="w-1/4 px-4 py-2 border">
+                  {new Date(payment.createdAt).toLocaleString()}
+                </td>
               </tr>
             ))}
           </tbody>

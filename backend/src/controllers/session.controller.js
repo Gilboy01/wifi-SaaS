@@ -94,13 +94,6 @@ exports.disconnectSession = async (req, res) => {
 exports.getHotspotSessions = async (req, res) => {
 
   try {
-    //  // Validate ObjectId format
-    //       if (!mongoose.Types.ObjectId.isValid(req.params.hotspotId)) {
-    //         return res.status(400).json({
-    //           success: false,
-    //           message: "Invalid hotspot ID format"
-    //         });
-    //       }
 
     const sessions = await Session.find({
         tenantId: req.user.tenantId,
@@ -140,3 +133,38 @@ exports.getHotspotSessions = async (req, res) => {
   }
 
 };
+
+// delete session
+exports.deleteSession = async(req, res) => {
+  try {
+     // Validate ObjectId format
+        if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+          return res.status(400).json({
+            success: false,
+            message: "Invalid session ID format"
+          });
+        }
+
+        const session = await Session.findOneAndDelete({
+          _id: req.params.id,
+          tenantId: req.user.tenantId
+        });
+
+        if(!session){
+          return res.status(404).json({
+            success: false,
+            message:"Session not found"})
+        }
+
+
+        res.status(200).json({
+          success: true,
+          message: "Session deleted successfully"
+        })
+  } catch (error) {
+    res.status(500).json({
+      success: false, 
+      message: "Failed to delete session"
+    })
+  }
+}

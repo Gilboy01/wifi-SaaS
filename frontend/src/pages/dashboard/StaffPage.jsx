@@ -19,7 +19,7 @@ const StaffPage = () => {
 
   useEffect(() => {
     fetchStaff();
-  }, []);
+  }, [loading]);
 
   // create staff
   const submit = async (e) => {
@@ -44,23 +44,25 @@ const StaffPage = () => {
   };
 
   const remove = async (id) => {
-    setLoading(true);
     try {
       await api.delete(`/users/staff/${id}`);
       toast.success("Staff Deleted successfully");
       fetchStaff();
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed");
-    } finally {
-      setLoading(false);
     }
   };
 
   return (
     <div className="p-6">
-      <h2 className="text-2xl font-bold mb-6">Staff</h2>
+      <h1 className="text-2xl font-bold mb-6">Add Staff</h1>
 
-      <form onSubmit={submit} className="grid gap-3 mb-8">
+      <form
+        onSubmit={submit}
+        className="grid gap-3 mb-8 p-6
+          rounded-xl
+          shadow-md"
+      >
         <input
           placeholder="Name"
           value={form.name}
@@ -70,6 +72,7 @@ const StaffPage = () => {
               name: e.target.value,
             })
           }
+          className="border p-3 rounded-lg"
         />
 
         <input
@@ -81,6 +84,7 @@ const StaffPage = () => {
               email: e.target.value,
             })
           }
+          className="border p-3 rounded-lg"
         />
 
         <input
@@ -93,10 +97,11 @@ const StaffPage = () => {
               password: e.target.value,
             })
           }
+          className="border p-3 rounded-lg"
         />
 
         <button
-          className="bg-green-500 text-white px-4 py-2 rounded"
+          className="bg-green-500 text-white px-4 py-2 rounded w-fit "
           disabled={loading}
           type="submit"
         >
@@ -104,32 +109,32 @@ const StaffPage = () => {
         </button>
       </form>
 
+      <div className="flex items-center justify-center">
+        <h2 className="text-xl font-bold mb-6">Available staff</h2>
+      </div>
       <table className="w-full border">
         <thead>
           <tr className=" bg-gray-400">
-            <th>Name</th>
-            <th>Email</th>
-            <th>Role</th>
-            <th>Action</th>
+            <th className="w-1/4 px-4 py-2 text-left border">Name</th>
+            <th className="w-1/4 px-4 py-2 text-left border">Email</th>
+            <th className="w-1/4 px-4 py-2 text-left border">Role</th>
+            <th className="w-1/4 px-4 py-2 text-left border">Action</th>
           </tr>
         </thead>
 
         <tbody>
           {users.map((user) => (
             <tr key={user._id}>
-              <td>{user.name}</td>
-
-              <td>{user.email}</td>
-
-              <td>{user.role}</td>
-
-              <td>
+              <td className="w-1/4 px-4 py-2 border">{user.name}</td>
+              <td className="w-1/4 px-4 py-2 border">{user.email}</td>
+              <td className="w-1/4 px-4 py-2 border">{user.role}</td>
+              <td className="w-1/4 px-4 py-2 border">
                 <button
                   onClick={() => remove(user._id)}
                   className="bg-red-500 text-white px-3 py-1 rounded"
                   disabled={loading}
                 >
-                  {loading ? <>loading...</> : <>Delete</>}
+                  Delete
                 </button>
               </td>
             </tr>

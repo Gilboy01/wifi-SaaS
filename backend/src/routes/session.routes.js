@@ -2,7 +2,8 @@ const express = require("express");
 const {
   getActiveSessions,
   disconnectSession,
-  getHotspotSessions
+  getHotspotSessions,
+  deleteSession
 } = require("../controllers/session.controller");
 const authMiddleware = require("../middleware/auth.middleware");
 const roleMiddleware = require("../middleware/role.middleware")
@@ -22,5 +23,8 @@ router.get("/",  roleMiddleware("admin"), getHotspotSessions);
 
 // disconnect session
 router.patch("/disconnect/:id", roleMiddleware("admin"), disconnectSession);
+
+// delete session
+router.delete("/delete/:id", roleMiddleware("admin"), deleteSession)
 
 module.exports = router;

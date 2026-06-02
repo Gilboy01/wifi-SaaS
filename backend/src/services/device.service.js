@@ -22,10 +22,6 @@ exports.registerDevice =  async ({
 
     // existing device
     if (device) {
-    //   device.lastSeen = new Date();
-    //   device.totalConnections += 1;
-
-    //   await device.save();
     device = await Device.findOneAndUpdate(
         { 
           tenantId,
@@ -34,9 +30,11 @@ exports.registerDevice =  async ({
         },
         {
          lastSeen: new Date(),
+         status: "online",
+          isBlocked: false,
           $inc: { totalConnections: 1 }
         },
-        { new: true }
+        { returnDocument: "after" }
       );
 
 
@@ -49,6 +47,7 @@ exports.registerDevice =  async ({
         tenantId,
         hotspotId,
         macAddress,
+        status: "online",
         totalConnections: 1
       });
 
