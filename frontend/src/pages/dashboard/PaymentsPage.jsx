@@ -6,20 +6,46 @@ import { toast } from "react-hot-toast";
 
 const Payments = () => {
   const [payments, setPayments] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const fetchPayments = async () => {
+    setLoading(true);
     try {
       const res = await api.get("/payments");
 
       setPayments(res.data.payments);
     } catch {
       toast.error("Failed to load payments");
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
     fetchPayments();
   }, []);
+
+  if (loading) {
+    return (
+      <div className="p-6">
+        <h2 className="text-2xl font-bold mb-6">Payments</h2>
+        <div className="flex items-center justify-center">
+          <p>Loading payment details...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (payments.length === 0) {
+    return (
+      <div className="p-6">
+        <h2 className="text-2xl font-bold mb-6"> Payment </h2>
+        <div className="flex items-center justify-center">
+          <h1 className="text-2xl font-bold">No payments available</h1>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="p-6">

@@ -74,35 +74,39 @@ const DevicesPage = () => {
       <div>
         <table className="w-full">
           <thead>
-            <tr>
-              <th>MAC</th>
-              <th>Hotspot</th>
-              <th>Last Seen</th>
-              <th>Status</th>
-              <th>Action</th>
+            <tr className="bg-gray-400">
+              <th className="w-1/4 px-4 py-2 text-left border">MAC</th>
+              <th className="w-1/4 px-4 py-2 text-left border">Hotspot</th>
+              <th className="w-1/4 px-4 py-2 text-left border">Last Seen</th>
+              <th className="w-1/4 px-4 py-2 text-left border">Status</th>
+              <th className="w-1/4 px-4 py-2 text-left border">Action</th>
             </tr>
           </thead>
 
           <tbody>
             {devices.map((device) => (
-              <tr key={device._id}>
-                <td>{device.macAddress}</td>
+              <tr key={device._id} className="border-t">
+                <td className="w-1/4 px-4 py-2 border">{device.macAddress}</td>
 
-                <td>{device.hotspotId?.name}</td>
+                <td className="w-1/4 px-4 py-2 border">
+                  {device.hotspotId?.name}
+                </td>
 
-                <td>{new Date(device.lastSeen).toLocaleString()}</td>
+                <td className="w-1/4 px-4 py-2 border">
+                  {new Date(device.lastSeen).toLocaleString()}
+                </td>
 
                 <td
                   className={
                     device.status === "online"
-                      ? "text-green-500"
-                      : "text-red-500"
+                      ? "text-green-500 w-1/4 px-4 py-2 border"
+                      : "text-red-500 w-1/4 px-4 py-2 border"
                   }
                 >
                   {device.status}
                 </td>
 
-                <td>
+                <td className="w-1/4 px-4 py-2 border">
                   <button
                     onClick={() => handleDisconnect(device._id)}
                     className="
