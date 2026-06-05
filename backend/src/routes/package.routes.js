@@ -15,10 +15,10 @@ router.use(authMiddleware)
 router.post("/", roleMiddleware("admin"), createPackage );
 
 // get all packages
-router.get("/", roleMiddleware("admin", "staff"), getPackages);
+router.get("/", roleMiddleware("admin"), getPackages);
 
 // get a particular package
-router.get("/:id", roleMiddleware("admin", "staff"), getPackage);
+router.get("/:id", roleMiddleware("admin"), getPackage);
 
 // update a package
 router.put("/:id", roleMiddleware("admin"), updatePackage);

@@ -14,11 +14,11 @@ const router = express.Router();
 router.use(authMiddleware);
 
 // active sessions
-router.get("/active", roleMiddleware("admin","staff"), getActiveSessions);
+router.get("/active", getActiveSessions);
 
 
 // hotspot sessions
-router.get("/",  roleMiddleware("admin"), getHotspotSessions);
+router.get("/", getHotspotSessions);
 
 
 // disconnect session

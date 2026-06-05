@@ -34,7 +34,7 @@ const Sidebar = () => {
       name: "Packages",
       path: "/dashboard/packages",
       icon: <Package />,
-      roles: ["admin", "staff"],
+      roles: ["admin"],
     },
 
     {

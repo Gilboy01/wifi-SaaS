@@ -51,7 +51,14 @@ function App() {
                 </RoleProtectedRoute>
               }
             />
-            <Route path="packages" element={<PackagesPage />} />
+            <Route
+              path="packages"
+              element={
+                <RoleProtectedRoute allowedRoles={["admin"]}>
+                  <PackagesPage />
+                </RoleProtectedRoute>
+              }
+            />
             <Route path="sessions" element={<SessionsPage />} />
             <Route
               path="payments"
