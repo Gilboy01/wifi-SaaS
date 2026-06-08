@@ -18,13 +18,6 @@ const PaymentPortal = () => {
 
   const { hotspot, hotspotId, macAddress } = location.state || {};
 
-  if (!hotspot || !hotspotId) {
-    return (
-      <div className="text-3xl flex min-h-screen items-center justify-center">
-        No Hotspot connected
-      </div>
-    );
-  }
   //   fetch hotspot
   // const fetchHotspot = async () => {
   //   try {
@@ -41,6 +34,7 @@ const PaymentPortal = () => {
   //   fetch packages
   //  GET /packages?hotspotId=xxx
   const fetchPackages = async () => {
+    if (!hotspotId) return;
     try {
       const res = await api.get(`/public/packages/${hotspotId}`);
 
@@ -56,7 +50,15 @@ const PaymentPortal = () => {
   useEffect(() => {
     // fetchHotspot();
     fetchPackages();
-  }, []);
+  }, [hotspotId]);
+
+  if (!hotspot || !hotspotId) {
+    return (
+      <div className="text-3xl flex min-h-screen items-center justify-center">
+        No Hotspot connected
+      </div>
+    );
+  }
 
   // for searching mac address from uri
   // const [searchParams] = useSearchParams();
@@ -68,14 +70,15 @@ const PaymentPortal = () => {
 
   //   continue to next step
   const handleContinue = async () => {
-    setLoading(true);
     if (!selectedPackage) {
       toast.error("Select package");
+      setLoading(false);
       return;
     }
 
-    if (!phone) {
+    if (!phone.trim()) {
       toast.error("Enter phone");
+      setLoading(false);
       return;
     }
 
@@ -83,6 +86,7 @@ const PaymentPortal = () => {
     // const macAddress = searchParams.get("mac");
 
     try {
+      setLoading(true);
       const res = await api.post("/payments/initiate", {
         hotspotId,
         packageId: selectedPackage._id,

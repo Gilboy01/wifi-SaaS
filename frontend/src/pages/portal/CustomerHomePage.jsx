@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import api from "../../api/axios";
-import { Link, useSearchParams, useNavigate } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import { Wifi, CreditCard, Ticket } from "lucide-react";
 import { useParams } from "react-router-dom";
 import toast from "react-hot-toast";
@@ -8,13 +8,14 @@ import toast from "react-hot-toast";
 const CustomerHomePage = () => {
   const { hotspotId } = useParams();
   const [hotspot, setHotspot] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
   //   fetch hotspot
   const fetchHotspot = async () => {
     try {
+      setLoading(true);
       const res = await api.get(`public/hotspots/${hotspotId}`);
       setHotspot(res.data?.data);
     } catch (error) {
@@ -28,42 +29,31 @@ const CustomerHomePage = () => {
   // load on app start
   useEffect(() => {
     fetchHotspot();
-  }, []);
+  }, [hotspotId]);
 
   //   handle buy now
-  const handleBuy = () => {
-    try {
-      setLoading(true);
-      const macAddress = searchParams.get("mac").toUpperCase();
-      navigate("/payment-portal", {
-        state: {
-          hotspot,
-          hotspotId,
-          macAddress,
-        },
-      });
-    } catch {
-      toast.error("Failed to continue to payment portal");
-    } finally {
-      setLoading(false);
-    }
+  const handleBuy = (e) => {
+    e.preventDefault(); // Prevent any parent triggers
+
+    const mac = searchParams.get("mac");
+    navigate("/payment-portal", {
+      state: {
+        hotspot,
+        hotspotId,
+        macAddress: mac.toUpperCase(),
+      },
+    });
   };
 
   //   handle redeem Voucher
-  const handleRedeemVoucher = () => {
-    try {
-      setLoading(true);
-      const macAddress = searchParams.get("mac").toUpperCase();
-      navigate("/voucher", {
-        state: {
-          macAddress,
-        },
-      });
-    } catch {
-      toast.error("Failed to continue to voucher page");
-    } finally {
-      setLoading(false);
-    }
+  const handleRedeemVoucher = (e) => {
+    e.preventDefault();
+    const mac = searchParams.get("mac").toUpperCase();
+    navigate("/voucher", {
+      state: {
+        macAddress: mac.toUpperCase(),
+      },
+    });
   };
 
   return (
@@ -121,8 +111,7 @@ const CustomerHomePage = () => {
           "
         >
           {/* Buy Package Card */}
-          <Link
-            to="/payment-portal"
+          <div
             className="
               border
               rounded-2xl
@@ -166,11 +155,10 @@ const CustomerHomePage = () => {
             >
               {loading ? <>loading...</> : <>Buy Now</>}
             </button>
-          </Link>
+          </div>
 
           {/* Voucher Card */}
-          <Link
-            to="/voucher"
+          <div
             className="
               border
               rounded-2xl
@@ -203,7 +191,6 @@ const CustomerHomePage = () => {
 
             <button
               onClick={handleRedeemVoucher}
-              disabled={loading}
               className="
                 mt-6
                 bg-green-600
@@ -213,9 +200,9 @@ const CustomerHomePage = () => {
                 rounded-lg
               "
             >
-              {loading ? <>loading...</> : <>Redeem Voucher</>}
+              Redeem Voucher
             </button>
-          </Link>
+          </div>
         </div>
 
         {/* Footer */}
@@ -227,7 +214,7 @@ const CustomerHomePage = () => {
             text-gray-400
           "
         >
-          Powered by Gilboy Technologies Copyright {Date().year}
+          Powered by Gilboy Technologies Copyright {new Date().getFullYear()}
         </div>
       </div>
     </div>

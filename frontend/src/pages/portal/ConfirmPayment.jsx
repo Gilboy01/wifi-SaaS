@@ -12,7 +12,7 @@ const ConfirmPayment = () => {
 
   if (!payment) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
+      <div className="text-3xl flex min-h-screen items-center justify-center">
         Payment not found
       </div>
     );
