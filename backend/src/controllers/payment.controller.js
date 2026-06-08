@@ -253,9 +253,23 @@ exports.mockSuccess = async (req, res) => {
 
     console.log(`MAC Address - ${normalizedMac} connected to internet successfully`);
 
+    const voucherCode ="WIFI-" + Math.random()
+    .toString(36)
+    .substring(2, 10)
+    .toUpperCase();
+
+    await Voucher.create({
+  tenantId: payment.tenantId,
+  hotspotId: pkg.hotspotId,
+  paymentId: payment._id,
+  packageId: payment.packageId,
+  code: voucherCode,
+});
+
     return res.status(200).json({
       success: true,
-      session
+      session,
+      voucher: voucherCode
     });
 
        

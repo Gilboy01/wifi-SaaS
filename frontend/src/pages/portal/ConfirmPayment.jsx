@@ -11,7 +11,11 @@ const ConfirmPayment = () => {
   const { payment, packageName } = location.state || {};
 
   if (!payment) {
-    return <div>Payment not found</div>;
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        Payment not found
+      </div>
+    );
   }
 
   const handleConfirm = async () => {

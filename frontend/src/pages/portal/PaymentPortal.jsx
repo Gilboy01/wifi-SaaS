@@ -1,31 +1,42 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+// import { useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 import api from "../../api/axios";
-import { useSearchParams } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+// import { useSearchParams } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
-const CustomerPortal = () => {
-  const { hotspotId } = useParams();
-  const [hotspot, setHotspot] = useState(null);
+const PaymentPortal = () => {
+  // const { hotspotId } = useParams();
+  // const [hotspot, setHotspot] = useState(null);
   const [packages, setPackages] = useState([]);
   const [selectedPackage, setSelectedPackage] = useState(null);
   const [phone, setPhone] = useState("");
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
+  const location = useLocation();
+
+  const { hotspot, hotspotId, macAddress } = location.state || {};
+
+  if (!hotspot || !hotspotId) {
+    return (
+      <div className="text-3xl flex min-h-screen items-center justify-center">
+        No Hotspot connected
+      </div>
+    );
+  }
   //   fetch hotspot
-  const fetchHotspot = async () => {
-    try {
-      const res = await api.get(`public/hotspots/${hotspotId}`);
-      setHotspot(res.data?.data);
-    } catch (error) {
-      console.log(error);
-      toast.error("Hotspot not found");
-    } finally {
-      setLoading(false);
-    }
-  };
+  // const fetchHotspot = async () => {
+  //   try {
+  //     const res = await api.get(`public/hotspots/${hotspotId}`);
+  //     setHotspot(res.data?.data);
+  //   } catch (error) {
+  //     console.log(error);
+  //     toast.error("Hotspot not found");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   //   fetch packages
   //  GET /packages?hotspotId=xxx
@@ -43,12 +54,12 @@ const CustomerPortal = () => {
 
   // load on app start
   useEffect(() => {
-    fetchHotspot();
+    // fetchHotspot();
     fetchPackages();
-  }, [hotspotId]);
+  }, []);
 
-  // for searching mac address from url
-  const [searchParams] = useSearchParams();
+  // for searching mac address from uri
+  // const [searchParams] = useSearchParams();
 
   // select package
   const handleSelect = (pkg) => {
@@ -68,8 +79,8 @@ const CustomerPortal = () => {
       return;
     }
 
-    // got ftom url
-    const macAddress = searchParams.get("mac");
+    //  //  MAC address got from uri
+    // const macAddress = searchParams.get("mac");
 
     try {
       const res = await api.post("/payments/initiate", {
@@ -80,7 +91,6 @@ const CustomerPortal = () => {
       });
       console.log(res.data);
       const payment = res.data?.payment;
-      // const paymentId = res.data?._id;
 
       // go to confirm page
       navigate("/confirm-payment", {
@@ -98,34 +108,12 @@ const CustomerPortal = () => {
     }
   };
 
-  // confirm payment
-  // const confirmPayment = async (paymentId) => {
-  //   try {
-  //     const res = await api.post(`/payments/mock-success/${paymentId}`);
-
-  //     if (res.data.success) {
-  //       toast.success("Payment confirmed. Internet activated.");
-
-  //       console.log("Session:", res.data);
-
-  //       // optional redirect
-  //       // navigate("/success");
-  //     }
-  //   } catch (error) {
-  //     console.error(error);
-
-  //     toast.error(
-  //       error.response?.data?.message || "Payment confirmation failed",
-  //     );
-  //   }
-  // };
-
   return (
     <>
       {loading ? (
         <div
           className="text-3xl 
-    flex items-center justify-center"
+    flex min-h-screen items-center justify-center"
         >
           loading...
         </div>
@@ -139,35 +127,23 @@ const CustomerPortal = () => {
         >
           <div
             className="
-    max-w-3xl
-    mx-auto
-  "
+            max-w-3xl
+            mx-auto
+          "
           >
             <h1
               className="
-      text-2xl
-      font-bold
-      mb-2
-    "
+                text-2xl
+                font-bold
+                mb-2
+              "
             >
               {hotspot?.name} hotspot
             </h1>
 
-            <p
-              className="
-      text-gray-500
-      mb-6
-    "
-            >
-              Choose your package
-            </p>
+            <p className="text-gray-500 mb-6 ">Choose your package</p>
 
-            <div
-              className="
-    grid
-    gap-4
-  "
-            >
+            <div className=" grid gap-4">
               {packages.map((pkg) => (
                 <div
                   key={pkg._id}
@@ -231,4 +207,4 @@ const CustomerPortal = () => {
   );
 };
 
-export default CustomerPortal;
+export default PaymentPortal;

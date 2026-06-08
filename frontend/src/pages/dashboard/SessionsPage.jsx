@@ -76,32 +76,38 @@ const Sessions = () => {
         <table className="w-full border">
           <thead>
             <tr className="bg-gray-400 border-t-2">
-              <th>MAC</th>
-              <th>Package</th>
-              <th>Started</th>
-              <th>Expires</th>
-              <th>Status</th>
-              <th>Action</th>
+              <th className="w-1/4 px-4 py-2 text-left border">MAC</th>
+              <th className="w-1/4 px-4 py-2 text-left border">Package</th>
+              <th className="w-1/4 px-4 py-2 text-left border">Started</th>
+              <th className="w-1/4 px-4 py-2 text-left border">Expires</th>
+              <th className="w-1/4 px-4 py-2 text-left border">Status</th>
+              <th className="w-1/4 px-4 py-2 text-left border">Action</th>
             </tr>
           </thead>
 
           <tbody>
             {sessions.map((session) => (
               <tr key={session._id} className="border-t">
-                <td>{session.macAddress}</td>
-                <td>{session.packageId?.name}</td>
-                <td>{new Date(session.startTime).toLocaleString()}</td>
-                <td>{new Date(session.expiryTime).toLocaleString()}</td>
+                <td className="w-1/4 px-4 py-2 border">{session.macAddress}</td>
+                <td className="w-1/4 px-4 py-2 border">
+                  {session.packageId?.name}
+                </td>
+                <td className="w-1/4 px-4 py-2 border">
+                  {new Date(session.startTime).toLocaleString()}
+                </td>
+                <td className="w-1/4 px-4 py-2 border">
+                  {new Date(session.expiryTime).toLocaleString()}
+                </td>
                 <td
                   className={`${
                     session.status === "active"
                       ? "text-green-500"
                       : "text-red-500"
-                  } font-medium`}
+                  } font-medium w-1/4 px-4 py-2 border`}
                 >
                   {session.status}
                 </td>
-                <td>
+                <td className="w-1/4 px-4 py-2 border">
                   {session.status === "active" ? (
                     <button
                       onClick={() => disconnect(session._id)}

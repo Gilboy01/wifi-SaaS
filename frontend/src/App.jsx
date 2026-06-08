@@ -4,9 +4,11 @@ import { Toaster } from "react-hot-toast";
 import LoginPage from "./pages/auth/LoginPage";
 import SignupPage from "./pages/auth/SignupPage";
 import UnauthorizedPage from "./pages/UnauthorizedPage";
-import CustomerPortal from "./pages/portal/CustomerPortal";
+import PaymentPortal from "./pages/portal/PaymentPortal";
 import ConfirmPayment from "./pages/portal/ConfirmPayment";
 import PaymentSuccess from "./pages/portal/PaymentSuccess";
+import VoucherPage from "./pages/portal/VoucherPage";
+import CustomerHomePage from "./pages/portal/CustomerHomePage";
 
 import DashboardLayout from "./layouts/dashboard/DashboardLayout";
 import DashboardHome from "./pages/dashboard/DashboardHome";
@@ -29,9 +31,17 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<SignupPage />} />
           <Route path="/unauthorized" element={<UnauthorizedPage />} />
-          <Route index path="/portal/:hotspotId" element={<CustomerPortal />} />
+
+          {/*Public customer portal routes*/}
+          <Route
+            index
+            path="/portal/:hotspotId"
+            element={<CustomerHomePage />}
+          />
+          <Route path="/payment-portal" element={<PaymentPortal />} />
           <Route path="/confirm-payment" element={<ConfirmPayment />} />
           <Route path="/payment-success" element={<PaymentSuccess />} />
+          <Route path="/voucher" element={<VoucherPage />} />
 
           {/* DASHBOARD ROUTES WITH LAYOUT */}
           <Route

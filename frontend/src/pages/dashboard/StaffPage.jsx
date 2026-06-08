@@ -57,58 +57,59 @@ const StaffPage = () => {
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-6">Add Staff</h1>
 
-      <form
-        onSubmit={submit}
-        className="grid gap-3 mb-8 p-6
+      <div className="flex items-center justify-center">
+        <form
+          onSubmit={submit}
+          className="grid gap-3 mb-8 p-6
           rounded-xl
-          shadow-md"
-      >
-        <input
-          placeholder="Name"
-          value={form.name}
-          onChange={(e) =>
-            setForm({
-              ...form,
-              name: e.target.value,
-            })
-          }
-          className="border p-3 rounded-lg"
-        />
-
-        <input
-          placeholder="Email"
-          value={form.email}
-          onChange={(e) =>
-            setForm({
-              ...form,
-              email: e.target.value,
-            })
-          }
-          className="border p-3 rounded-lg"
-        />
-
-        <input
-          type="password"
-          placeholder="Password"
-          value={form.password}
-          onChange={(e) =>
-            setForm({
-              ...form,
-              password: e.target.value,
-            })
-          }
-          className="border p-3 rounded-lg"
-        />
-
-        <button
-          className="bg-green-500 text-white px-4 py-2 rounded w-fit "
-          disabled={loading}
-          type="submit"
+          shadow-md w-96"
         >
-          {loading ? <>loading...</> : <>Add Staff</>}
-        </button>
-      </form>
+          <input
+            placeholder="Name"
+            value={form.name}
+            onChange={(e) =>
+              setForm({
+                ...form,
+                name: e.target.value,
+              })
+            }
+            className="border p-3 rounded-lg"
+          />
 
+          <input
+            placeholder="Email"
+            value={form.email}
+            onChange={(e) =>
+              setForm({
+                ...form,
+                email: e.target.value,
+              })
+            }
+            className="border p-3 rounded-lg"
+          />
+
+          <input
+            type="password"
+            placeholder="Password"
+            value={form.password}
+            onChange={(e) =>
+              setForm({
+                ...form,
+                password: e.target.value,
+              })
+            }
+            className="border p-3 rounded-lg"
+          />
+
+          <button
+            className="bg-green-500 text-white px-4 py-2 rounded w-fit"
+            disabled={loading}
+            type="submit"
+          >
+            {loading ? <>loading...</> : <>Add Staff</>}
+          </button>
+        </form>
+      </div>
       <div className="flex items-center justify-center">
         <h2 className="text-xl font-bold mb-6">Available staff</h2>
       </div>
