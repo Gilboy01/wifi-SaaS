@@ -4,6 +4,7 @@ const { v4: uuidv4 } = require("uuid");
 const Payment = require("../models/payment.model");
 const Package = require("../models/package.model");
 const Session = require("../models/session.model");
+const Voucher = require("../models/voucher.model")
 const { requestToPay } = require("../services/mtn.service");
 const { grantInternetAccess, revokeInternetAccess } = require("../services/router.service");
 const { registerDevice } = require("../services/device.service");
@@ -221,7 +222,11 @@ exports.mockSuccess = async (req, res) => {
     payment.deviceId = device._id;
 
 
-         // Grant internet access FIRST
+      // mark payment successful 
+    payment.status = "success";
+    await payment.save();
+
+         // Grant internet access 
     try {
       await grantInternetAccess({
         hotspotId: pkg.hotspotId,
@@ -235,9 +240,7 @@ exports.mockSuccess = async (req, res) => {
       });
     }
 
-    // mark payment successful only after access granted
-    payment.status = "success";
-    await payment.save();
+  
 
     // create session
     const session = await Session.create({
@@ -258,7 +261,7 @@ exports.mockSuccess = async (req, res) => {
     .substring(2, 10)
     .toUpperCase();
 
-    await Voucher.create({
+   const voucher = await Voucher.create({
   tenantId: payment.tenantId,
   hotspotId: pkg.hotspotId,
   paymentId: payment._id,
@@ -269,7 +272,7 @@ exports.mockSuccess = async (req, res) => {
     return res.status(200).json({
       success: true,
       session,
-      voucher: voucherCode
+      voucher
     });
 
        

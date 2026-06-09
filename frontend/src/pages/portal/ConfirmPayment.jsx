@@ -7,23 +7,33 @@ const ConfirmPayment = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [voucher, setVoucher] = useState(null);
+  const [session, setSession] = useState(null);
 
   const { payment, packageName } = location.state || {};
-
-  if (!payment) {
-    return (
-      <div className="text-3xl flex min-h-screen items-center justify-center">
-        Payment not found
-      </div>
-    );
-  }
 
   const handleConfirm = async () => {
     setLoading(true);
     try {
-      await api.post(`/payments/mock-success/${payment._id}`);
+      const res = await api.post(`/payments/mock-success/${payment._id}`);
+
+      // payload
+      const incomingVoucher = res.data?.voucher;
+      const incomingSession = res.data?.session;
+      // setters
+      setVoucher(incomingVoucher);
+      setSession(incomingSession);
+
       toast.success("Payment successful");
-      navigate("/payment-success");
+
+      // Log the fresh data explicitly to see it instantly
+      console.log("Fresh voucher data:", incomingVoucher);
+      navigate("/payment-success", {
+        state: {
+          session: incomingSession,
+          voucher: incomingVoucher,
+        },
+      });
     } catch (error) {
       console.error(error);
 
@@ -33,6 +43,13 @@ const ConfirmPayment = () => {
     }
   };
 
+  if (!payment) {
+    return (
+      <div className="text-3xl flex min-h-screen items-center justify-center">
+        Payment not found
+      </div>
+    );
+  }
   return (
     <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow mt-10">
       <h2 className="text-xl font-bold mb-6">Confirm Payment</h2>
