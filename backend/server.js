@@ -12,7 +12,8 @@ const userRoutes = require("./src/routes/staff.routes");
 const hotspotRoutes = require("./src/routes/hotspot.routes");
 const publicRoutes = require( "./src/routes/public.routes");
 const deviceRoutes = require( "./src/routes/device.routes");
-const voucherRoutes = require("./src/routes/voucher.routes")
+const voucherRoutes = require("./src/routes/voucher.routes");
+const dashboardRoutes = require("./src/routes/dashboard.routes")
 
 
 require("./src/jobs/cron.job");
@@ -44,6 +45,7 @@ app.use("/api/hotspots", hotspotRoutes);
 app.use("/api/public", publicRoutes);
 app.use("/api/devices", deviceRoutes);
 app.use("/api/vouchers", voucherRoutes);
+app.use("/api/dashboard", dashboardRoutes);
 
 
 
