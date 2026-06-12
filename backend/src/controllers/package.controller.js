@@ -100,7 +100,7 @@ exports.getPackages = async (req, res) => {
 
     const query = {
       tenantId: req.user.tenantId,
-      isActive: true
+      // isActive: true
     };
 
     // const packages = await Package.find({
@@ -109,7 +109,7 @@ exports.getPackages = async (req, res) => {
     // });
 
      const [packages, total] = await Promise.all([
-     Package.find(query).skip(skip).limit(limit),
+     Package.find(query).populate("hotspotId", "name").skip(skip).limit(limit),
       Package.countDocuments(query)
     ]);
 

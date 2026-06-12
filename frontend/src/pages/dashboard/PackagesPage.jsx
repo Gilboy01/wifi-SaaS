@@ -280,11 +280,11 @@ const PackagesPage = () => {
                   {pkg.name}
                 </h2>
 
-                <p>Price: UGX.{pkg.price}</p>
+                <p>Price: UGX.{pkg.price.toLocaleString()}</p>
 
                 <p>Duration:{pkg.duration} mins</p>
 
-                <p>Hotspot: {pkg.hotspotId}</p>
+                <p>Hotspot: {pkg.hotspotId?.name}</p>
 
                 <p>
                   Status:
