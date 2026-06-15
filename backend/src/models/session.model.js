@@ -29,9 +29,7 @@ const sessionSchema = new mongoose.Schema({
     required: true
   },
 
-   phoneNumber: String,
-
-
+  //  phoneNumber: String,
 
   startTime: {
     type: Date,
@@ -47,6 +45,6 @@ const sessionSchema = new mongoose.Schema({
     enum: ["active", "expired", "terminated"],
     default: "active"
   }
-});
+},{timestamps: true} );
 
 module.exports = mongoose.model("Session", sessionSchema);

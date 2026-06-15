@@ -86,7 +86,7 @@ const PackagesPage = () => {
     setLoading(true);
     try {
       await api.delete(`/packages/${id}`);
-      toast.success("Package deleted successfully");
+      toast.success("Package deactivated successfully");
       fetchPackages();
     } catch (error) {
       console.log(error);
@@ -113,7 +113,7 @@ const PackagesPage = () => {
             font-bold
           "
           >
-            Create Package
+            Create Wi-Fi Package
           </h1>
         </div>
         <form
@@ -306,7 +306,7 @@ const PackagesPage = () => {
           rounded-lg
         "
                 >
-                  {loading ? <>Loading...</> : <>Delete</>}
+                  {loading ? <>Loading...</> : <>Deactivate</>}
                 </button>
                 <button
                   onClick={() => {

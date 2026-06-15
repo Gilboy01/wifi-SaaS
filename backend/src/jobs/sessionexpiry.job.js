@@ -20,7 +20,7 @@ exports.expireSessions = async () => {
     try {
       await revokeInternetAccess({
         hotspotId: session.hotspotId ,
-       macAddress: session.macAddress
+       macAddress: session.macAddress.toUpperCase().trim()
       });
 
     session.status = "expired";
@@ -29,15 +29,22 @@ exports.expireSessions = async () => {
     console.log( `Expired ${session.macAddress}, Internet blocked`);
 
     // update device
-    await Device.findOneAndUpdate(
+    const device = await Device.findOne(
         {
           hotspotId: session.hotspotId,
-          macAddress: session.macAddress
+          macAddress: session.macAddress.toUpperCase().trim(),
         },
-        {
-          status: "offline"
-        }
+        // {
+        //   status: "offline"
+        // },
+        // {
+        //   new: true
+        // }
       );
+
+      device.status = "offline";
+      await device.save();
+
    } catch (error) {
         console.error( `Failed to revoke internet access for ${session.macAddress}:`, error.message);  
       }

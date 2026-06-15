@@ -1,20 +1,15 @@
 // services/router.service.js
-
-
 const RouterOSAPI = require("node-routeros").RouterOSAPI;
-
 const config = require("../config/router.config");
-
-
 const Hotspot = require("../models/hotspot.model");
 
 const isRouterMockEnabled = () => {
   return ["true", "1", "yes"].includes(String(process.env.ROUTER_MOCK).toLowerCase());
 };
 
+// check for hotspot
 const ensureHotspotExists = async (hotspotId) => {
   const hotspot = await Hotspot.findById(hotspotId);
-
   if (!hotspot) {
     throw new Error("Hotspot not found");
   }
@@ -24,7 +19,6 @@ const ensureHotspotExists = async (hotspotId) => {
 
 // connect to router
 const connectRouter = async (hotspotId) => {
-
   // find hotspot
   const hotspot = await ensureHotspotExists(hotspotId);
 
@@ -56,7 +50,6 @@ const connectRouter = async (hotspotId) => {
 };
 
 // grant internet access
-
 exports.grantInternetAccess =  async ({
     hotspotId,
     macAddress

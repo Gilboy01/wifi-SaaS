@@ -36,15 +36,17 @@ const DashboardPage = () => {
     );
   return (
     <div>
-      <h1
-        className="
+      <div className="mb-8">
+        <h1
+          className="
         text-3xl
         font-bold
-        mb-8
       "
-      >
-        Dashboard
-      </h1>
+        >
+          Dashboard
+        </h1>
+        <p>Welcome to the dashboard!</p>
+      </div>
 
       <div
         className="
